@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>JVM 启动与垃圾回收（GC）调优参数配置指南</title>
+<link rel="icon" type="image/svg+xml" media="(prefers-color-scheme: light)" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231f4e9c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3Cpath d='M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" media="(prefers-color-scheme: dark)" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237cb0ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3Cpath d='M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z'/%3E%3C/svg%3E">
+<style>
+:root{color-scheme:light dark;--bg:#fff;--bg2:#fafafa;--fg:#222;--fg2:#111;--mu:#666;--bd:#dcdcdc;--bd2:#ebebeb;--ac:#1f4e9c;--cbg:#f6f8fa;--cbd:#d8dee4;--cfg:#24292f;--tf:#0a3069;--tv:#953800;--th:#f6f8fa;--ra:#fafafa;--bb:#fff;--bbd:#d0d7de;--bh:#f0f2f5;--bhb:#b9c0c8}
+@media(prefers-color-scheme:dark){:root{--bg:#1b1d1f;--bg2:#212326;--fg:#e3e5e8;--fg2:#f2f3f5;--mu:#a2a8b0;--bd:#3a3e44;--bd2:#2c3035;--ac:#7cb0ff;--cbg:#22252a;--cbd:#3a3f46;--cfg:#d5d9e0;--tf:#79b8ff;--tv:#ffab70;--th:#24272b;--ra:#1f2226;--bb:#24272b;--bbd:#3a3f46;--bh:#2c3036;--bhb:#4a5058}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:16px}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.7 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.w{max-width:880px;margin:0 auto;padding:0 20px}
+header{border-bottom:1px solid var(--bd);background:var(--bg2);padding:28px 0 24px;margin-bottom:28px}
+h1{margin:0 0 8px;font-size:1.5rem;line-height:1.45;font-weight:700;color:var(--fg2)}
+.sub{margin:0;color:var(--mu);font-size:.9rem}
+.toc{margin:0 0 32px;padding-bottom:16px;border-bottom:1px solid var(--bd2);font-size:.88rem;color:var(--mu)}
+.toc a{color:var(--ac);text-decoration:none;margin-right:18px;white-space:nowrap;display:inline-block}
+.toc a:hover{text-decoration:underline}
+.s{margin-bottom:46px}
+h2{margin:0 0 20px;padding-bottom:8px;font-size:1.2rem;font-weight:700;color:var(--fg2);border-bottom:1px solid var(--bd)}
+h3{margin:32px 0 10px;font-size:1.02rem;font-weight:700;color:var(--fg2)}
+h3:first-of-type{margin-top:4px}
+h4{margin:18px 0 8px;font-size:.9rem;font-weight:700;color:var(--fg)}
+p{margin:0 0 12px}
+.note{margin:0 0 16px;padding:10px 14px;font-size:.88rem;color:var(--mu);background:var(--bg2);border-left:3px solid var(--bd)}
+.note strong{color:var(--fg)}
+.lead{color:var(--mu);font-size:.88rem;margin-bottom:12px}
+.cb{position:relative;margin:0 0 18px}
+pre{margin:0;padding:14px 66px 14px 16px;overflow-x:auto;background:var(--cbg);border:1px solid var(--cbd);border-radius:4px;font-size:.82rem;line-height:1.75;color:var(--cfg);tab-size:2}
+code{font-family:"JetBrains Mono","SFMono-Regular",Menlo,Consolas,"Liberation Mono","Courier New",monospace}
+pre code{display:block;white-space:pre}
+.tf{color:var(--tf)}
+.tv{color:var(--tv)}
+.cp{position:absolute;top:8px;right:8px;padding:4px 10px;font-size:.72rem;font-family:inherit;color:var(--mu);background:var(--bb);border:1px solid var(--bbd);border-radius:3px;cursor:pointer;transition:background .15s,border-color .15s}
+.cp:hover{background:var(--bh);border-color:var(--bhb)}
+.cp.ok{color:#1a7f37;border-color:#a6d5b4;background:#f2fbf4}
+@media(prefers-color-scheme:dark){.cp.ok{color:#7ee2a8;border-color:#2f6a44;background:#1e2f24}}
+td code,p code,li code,.note code{padding:1px 5px;font-size:.85em;color:var(--tf);background:var(--cbg);border:1px solid var(--cbd);border-radius:3px;white-space:nowrap}
+.tw{margin:12px 0 20px;overflow-x:auto;border:1px solid var(--bd);border-radius:4px}
+table{width:100%;min-width:520px;border-collapse:collapse;font-size:.87rem}
+thead th{padding:10px 14px;text-align:left;font-weight:700;white-space:nowrap;color:var(--fg2);background:var(--th);border-bottom:1px solid var(--bd)}
+tbody td{padding:9px 14px;border-bottom:1px solid var(--bd2);color:var(--mu);vertical-align:top}
+tbody td:first-child{color:var(--fg);font-weight:600;white-space:nowrap}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:nth-child(even){background:var(--ra)}
+.hl{color:var(--fg2);font-weight:600}
+ol.st{margin:0;padding-left:22px}
+ol.st li{margin-bottom:14px;color:var(--mu)}
+ol.st li:last-child{margin-bottom:0}
+ol.st li strong{color:var(--fg)}
+footer{border-top:1px solid var(--bd);margin-top:10px;padding:18px 0 40px;font-size:.82rem;color:var(--mu)}
+#tt{position:fixed;right:18px;bottom:18px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;background:var(--bb);color:var(--mu);border:1px solid var(--bbd);border-radius:4px;cursor:pointer;opacity:0;visibility:hidden;transition:opacity .18s,visibility .18s;z-index:50}
+#tt.on{opacity:1;visibility:visible}
+#tt:hover{background:var(--bh);border-color:var(--bhb)}
+@media(max-width:640px){body{font-size:15px}h1{font-size:1.28rem}.w{padding:0 16px}pre{font-size:.78rem;padding:12px 58px 12px 12px}.toc a{margin-right:12px}}
+</style>
+</head>
+<body>
+<header><div class="w">
+<h1>JVM 启动与垃圾回收（GC）调优参数配置指南</h1>
+<p class="sub">汇集从 Java 7 到 Java 25+ 的主流垃圾回收调优参数模板，并附 CMS &amp; ParNew 内存与线程细化配置表。</p>
+</div></header>
+<div class="w">
+<nav class="toc">
+<a href="#s1">一、各版本 GC 参数推荐</a>
+<a href="#s2">二、CMS &amp; ParNew 调优参考表</a>
+<a href="#s3">三、配置与使用注意事项</a>
+</nav>
+<main>
+<section class="s" id="s1">
+<h2>一、各 Java 版本 GC 参数推荐</h2>
+<h3>1. Java 25+（分代 Shenandoah GC）</h3>
+<div class="note"><strong>特性说明</strong>：启用 Compact Object Headers（紧凑对象头）与 Generational Shenandoah（分代超低停顿收集器）。</div>
+<h4>方案 A：极致性能 / 低延迟常驻模式（推荐游戏端 / 固定内存环境）</h4>
+<div class="cb"><pre><code>-XX:+ExplicitGCInvokesConcurrent -XX:ReservedCodeCacheSize=384M -XX:+AlwaysPreTouch -XX:+UseCompactObjectHeaders -XX:+UseShenandoahGC -XX:ShenandoahGCMode=generational -XX:ShenandoahGCHeuristics=adaptive</code></pre></div>
+<h4>方案 B：动态内存归还模式（推荐空闲节约内存环境）</h4>
+<div class="cb"><pre><code>-XX:+UnlockExperimentalVMOptions -XX:+ExplicitGCInvokesConcurrent -XX:ReservedCodeCacheSize=384M -XX:+UseCompactObjectHeaders -XX:+UseShenandoahGC -XX:ShenandoahGCMode=generational -XX:ShenandoahGCHeuristics=adaptive -XX:+ShenandoahUncommit -XX:ShenandoahUncommitDelay=30000</code></pre></div>
+<h3>2. Java 9+（G1 GC）</h3>
+<div class="note"><strong>特性说明</strong>：现代 Java 默认的低停顿垃圾收集器。</div>
+<h4>方案 A：高响应 / 极致低停顿模式（推荐客户端 / 动作密集场景）</h4>
+<div class="cb"><pre><code>-XX:+ExplicitGCInvokesConcurrent -XX:ReservedCodeCacheSize=384M -XX:+AlwaysPreTouch -XX:+UseG1GC -XX:MaxGCPauseMillis=25 -XX:GCPauseIntervalMillis=50 -XX:+G1UseAdaptiveIHOP -XX:+UseAdaptiveSizePolicy</code></pre></div>
+<h4>方案 B：自适应周期回收模式（兼顾性能与周期性内存整理）</h4>
+<div class="cb"><pre><code>-XX:+ExplicitGCInvokesConcurrent -XX:ReservedCodeCacheSize=384M -XX:+UseG1GC -XX:MaxGCPauseMillis=50 -XX:+G1UseAdaptiveIHOP -XX:+UseAdaptiveSizePolicy -XX:G1PeriodicGCInterval=30000 -XX:+G1PeriodicGCInvokesConcurrent</code></pre></div>
+<h3>3. Java 8（CMS + ParNew 经典低延迟方案）</h3>
+<div class="cb"><pre><code>-Xmx4096M -Xms4096M -Xmn1024M -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:+ExplicitGCInvokesConcurrent -XX:+AlwaysPreTouch -XX:SurvivorRatio=25 -XX:MaxTenuringThreshold=1 -XX:TargetSurvivorRatio=90 -XX:CMSInitiatingOccupancyFraction=60 -XX:+UseCMSInitiatingOccupancyOnly -XX:+CMSScavengeBeforeRemark -XX:+CMSParallelRemarkEnabled -XX:+CMSConcurrentMTEnabled -XX:+UseCMSCompactAtFullCollection -XX:CMSFullGCsBeforeCompaction=1 -XX:ParallelGCThreads=12 -XX:ConcGCThreads=4 -XX:ReservedCodeCacheSize=384M -XX:+UseCodeCacheFlushing</code></pre></div>
+<h3>4. Java 7（CMS + ParNew + 永久代调优）</h3>
+<div class="cb"><pre><code>-Xmx4096M -Xms4096M -Xmn1024M -XX:PermSize=256M -XX:MaxPermSize=512M -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:+CMSClassUnloadingEnabled -XX:+ExplicitGCInvokesConcurrent -XX:+AlwaysPreTouch -XX:SurvivorRatio=25 -XX:MaxTenuringThreshold=1 -XX:TargetSurvivorRatio=90 -XX:CMSInitiatingOccupancyFraction=60 -XX:+UseCMSInitiatingOccupancyOnly -XX:+CMSScavengeBeforeRemark -XX:+CMSParallelRemarkEnabled -XX:+CMSConcurrentMTEnabled -XX:+UseCMSCompactAtFullCollection -XX:CMSFullGCsBeforeCompaction=1 -XX:ParallelGCThreads=12 -XX:ConcGCThreads=4 -XX:ReservedCodeCacheSize=384M -XX:+UseCodeCacheFlushing</code></pre></div>
+</section>
+<section class="s" id="s2">
+<h2>二、CMS &amp; ParNew 专有调优参考表</h2>
+<div class="note"><strong>设计说明</strong>：与 G1、Shenandoah 能够根据运行状况全自动切分 Region 并动态调整分代比例不同，<strong>CMS + ParNew 缺乏自适应分代能力</strong>。因此，在使用上述 Java 7 / 8 的 CMS 模板时，必须人工计算并指定合理的 <code>-Xmn</code>（新生代大小）与 GC 线程分配，以平衡 Minor GC 频率、对象晋升速度与并发 CPU 争抢。</div>
+<h3>表 1：<code>-Xmn</code> 与总堆大小建议（CMS 专享）</h3>
+<p class="lead">根据所分配的总堆（<code>-Xmx</code> / <code>-Xms</code>），按照 1/6 至 1/4 的比例计算出的新生代设定值：</p>
+<div class="tw"><table>
+<thead><tr><th>总堆（<code>-Xmx</code> / <code>-Xms</code>）</th><th>按 1/6 比例</th><th>按 1/4 比例</th><th>建议起始值</th></tr></thead>
+<tbody>
+<tr><td>6G</td><td>1G</td><td>1.5G</td><td class="hl">1G ~ 1.5G</td></tr>
+<tr><td>4G</td><td>683M</td><td>1G</td><td class="hl">768M ~ 1G</td></tr>
+<tr><td>3G</td><td>512M</td><td>768M</td><td class="hl">512M ~ 768M</td></tr>
+<tr><td>2G</td><td>341M</td><td>512M</td><td class="hl">384M ~ 512M</td></tr>
+<tr><td>1G</td><td>170M</td><td>256M</td><td class="hl">256M</td></tr>
+</tbody></table></div>
+<h3>表 2：GC 线程数建议（专用于 <code>ParallelGCThreads</code> 与 <code>ConcGCThreads</code> 配比）</h3>
+<p class="lead">CMS 在 STW 阶段（ParNew 复制、CMS Remark）使用并行线程，在后台标记/清除阶段使用并发线程。为防止并发 GC 与游戏/业务主线程发生 CPU 抢占导致掉帧，建议按主机线程数调整：</p>
+<div class="tw"><table>
+<thead><tr><th>CPU 线程数</th><th><code>-XX:ParallelGCThreads</code></th><th><code>-XX:ConcGCThreads</code></th><th>说明</th></tr></thead>
+<tbody>
+<tr><td>8</td><td class="hl">6</td><td class="hl">2</td><td>为业务线程保留约 2 个核心；并发线程保持默认 2 即可，最多不超过 3。</td></tr>
+<tr><td>4</td><td class="hl">2</td><td class="hl">1</td><td>为业务线程保留约 2 个核心；并发线程保持默认 1。</td></tr>
+</tbody></table></div>
+</section>
+<section class="s" id="s3">
+<h2>三、配置与使用注意事项</h2>
+<ol class="st">
+<li><strong>CMS 参数替换指南</strong>：如果你在 Java 7 或 Java 8 中分配的内存不是 4G，请直接查阅 <strong>表 1</strong> 将 <code>-Xmn</code> 替换为对应档位的建议值；若机器 CPU 为 4 核或 8 线程，请根据 <strong>表 2</strong> 替换模板中的 <code>-XX:ParallelGCThreads</code> 和 <code>-XX:ConcGCThreads</code>。</li>
+<li><strong>Java 7 专属要求</strong>：在 Java 7 下运行大型模组或复杂应用时，必须保留 <code>-XX:PermSize</code>、<code>-XX:MaxPermSize</code> 以及 <code>-XX:+CMSClassUnloadingEnabled</code>；迁移至 Java 8 时应将其移除。</li>
+<li><strong>架构寻址</strong>：当 <code>-Xmx</code> 超过 1536M 时，必须使用 64 位（x64）JVM 启动。</li>
+</ol>
+</section>
+</main>
+<footer>JVM 启动与垃圾回收（GC）调优参数配置指南 · 参数模板仅供调优起点，请结合实际压测结果调整</footer>
+</div>
+<button id="tt" aria-label="返回顶部" title="返回顶部"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+<script>
+(function(){
+document.querySelectorAll('pre code').forEach(function(e){
+var s=e.textContent.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+s=s.replace(/(-XX:[-+]?[A-Za-z0-9_]+)(=[^\s]+)?/g,function(m,f,v){return '<span class="tf">'+f+'</span>'+(v?'<span class="tv">'+v+'</span>':'')});
+s=s.replace(/(-X(?:mx|ms|mn|ss)[0-9]+[kKmMgG]?)/g,'<span class="tv">$1</span>');
+e.innerHTML=s;
+});
+function cp(t){
+if(navigator.clipboard&&window.isSecureContext)return navigator.clipboard.writeText(t);
+return new Promise(function(ok,no){
+var a=document.createElement('textarea');
+a.value=t;a.style.cssText='position:fixed;top:-1000px;opacity:0';
+document.body.appendChild(a);a.focus();a.select();
+try{document.execCommand('copy');ok()}catch(e){no(e)}finally{document.body.removeChild(a)}
+});
+}
+document.querySelectorAll('pre').forEach(function(p){
+var w=document.createElement('div');
+w.className='cb';
+p.parentNode.insertBefore(w,p);
+w.appendChild(p);
+var b=document.createElement('button');
+b.type='button';b.className='cp';b.textContent='复制';
+b.onclick=function(){
+var c=p.querySelector('code');
+cp(c?c.textContent:p.textContent).then(function(){
+b.textContent='已复制';b.classList.add('ok');
+setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1600);
+}).catch(function(){
+b.textContent='复制失败';
+setTimeout(function(){b.textContent='复制'},1600);
+});
+};
+w.appendChild(b);
+});
+var t=document.getElementById('tt');
+function sc(){t.classList.toggle('on',window.scrollY>400)}
+window.addEventListener('scroll',sc,{passive:true});
+sc();
+t.onclick=function(){window.scrollTo({top:0,behavior:'smooth'})};
+})();
+</script>
+</body>
+</html>
