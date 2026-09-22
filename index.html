@@ -53,10 +53,21 @@ ol.st li{margin-bottom:14px;color:var(--mu)}
 ol.st li:last-child{margin-bottom:0}
 ol.st li strong{color:var(--fg)}
 footer{border-top:1px solid var(--bd);margin-top:10px;padding:18px 0 40px;font-size:.82rem;color:var(--mu)}
-#tt{position:fixed;right:18px;bottom:18px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;background:var(--bb);color:var(--mu);border:1px solid var(--bbd);border-radius:4px;cursor:pointer;opacity:0;visibility:hidden;transition:opacity .18s,visibility .18s;z-index:50}
+#tt{position:fixed;right:18px;bottom:18px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;background:var(--bb);color:var(--mu);border:1px solid var(--bbd);border-radius:4px;cursor:pointer;opacity:0;visibility:hidden;transition:opacity .18s,visibility .18s,background .15s,border-color .15s;z-index:50}
 #tt.on{opacity:1;visibility:visible}
 #tt:hover{background:var(--bh);border-color:var(--bhb)}
-@media(max-width:640px){body{font-size:15px}h1{font-size:1.28rem}.w{padding:0 16px}pre{font-size:.78rem;padding:12px 58px 12px 12px}.toc a{margin-right:12px}}
+@media(max-width:640px){
+body{font-size:15px}h1{font-size:1.28rem}.w{padding:0 16px}pre{font-size:.78rem;padding:12px 58px 12px 12px}.toc a{margin-right:12px}
+.tw2{border:none;overflow:visible}
+.t2{min-width:0;font-size:.85rem}
+.t2 thead{display:none}
+.t2 tbody tr{display:block;background:var(--bg2);border:1px solid var(--bd);border-radius:4px;padding:8px 12px;margin-bottom:10px}
+.t2 tbody tr:last-child{margin-bottom:0}
+.t2 tbody tr:nth-child(even){background:var(--bg2)}
+.t2 tbody td{display:block;border:none;padding:3px 0;white-space:normal;color:var(--fg)}
+.t2 tbody td:first-child{white-space:normal}
+.t2 tbody td[data-l]::before{content:attr(data-l) "：";color:var(--mu);font-weight:600}
+}
 </style>
 </head>
 <body>
@@ -106,11 +117,21 @@ footer{border-top:1px solid var(--bd);margin-top:10px;padding:18px 0 40px;font-s
 </tbody></table></div>
 <h3>表 2：GC 线程数建议（专用于 <code>ParallelGCThreads</code> 与 <code>ConcGCThreads</code> 配比）</h3>
 <p class="lead">CMS 在 STW 阶段（ParNew 复制、CMS Remark）使用并行线程，在后台标记/清除阶段使用并发线程。为防止并发 GC 与游戏/业务主线程发生 CPU 抢占导致掉帧，建议按主机线程数调整：</p>
-<div class="tw"><table>
+<div class="tw tw2"><table class="t2">
 <thead><tr><th>CPU 线程数</th><th><code>-XX:ParallelGCThreads</code></th><th><code>-XX:ConcGCThreads</code></th><th>说明</th></tr></thead>
 <tbody>
-<tr><td>8</td><td class="hl">6</td><td class="hl">2</td><td>为业务线程保留约 2 个核心；并发线程保持默认 2 即可，最多不超过 3。</td></tr>
-<tr><td>4</td><td class="hl">2</td><td class="hl">1</td><td>为业务线程保留约 2 个核心；并发线程保持默认 1。</td></tr>
+<tr>
+<td data-l="CPU 线程数">8</td>
+<td data-l="-XX:ParallelGCThreads" class="hl">6</td>
+<td data-l="-XX:ConcGCThreads" class="hl">2</td>
+<td data-l="说明">为业务线程保留约 2 个核心；并发线程保持默认 2 即可，最多不超过 3。</td>
+</tr>
+<tr>
+<td data-l="CPU 线程数">4</td>
+<td data-l="-XX:ParallelGCThreads" class="hl">2</td>
+<td data-l="-XX:ConcGCThreads" class="hl">1</td>
+<td data-l="说明">为业务线程保留约 2 个核心；并发线程保持默认 1。</td>
+</tr>
 </tbody></table></div>
 </section>
 <section class="s" id="s3">
