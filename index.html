@@ -265,7 +265,7 @@
   .arg--value   { color:#79c0ff; background:rgba(56,139,253,.15) }  /* -XX:Key=Value */
   .arg--memory  { color:#e3b341; background:rgba(187,128,9,.15) }   /* -Xmx / -Xms / -Xmn */
   .arg--system  { color:#d2a8ff; background:rgba(163,113,247,.15) } /* -D 系统属性 */
-  .arg--plain   { color:#c9d1d9; background:transparent }
+  .arg--plain   { color:#c9d1d9; background:rgba(110,118,129,.18) } /* 其他 */
 
   /* ============================================================
      8. 参数描述面板（点击参数后显示）
@@ -295,15 +295,18 @@
     to  { opacity: 1;  transform: none; }
   }
 
+  /* 描述面板左侧的参数名：默认态为中性色，
+     激活时由脚本同步为被点击参数的背景色与文字色 */
   .arg-desc__name{
     flex: 0 0 auto;
     padding: 1px 6px;
     font-family: var(--mono);
     font-size: 12.5px;
-    color: #79c0ff;
-    background: rgba(56,139,253,.15);
+    color: var(--text-muted);
+    background: rgba(110,118,129,.18);
     border-radius: 3px;
     word-break: break-all;
+    transition: background-color .15s, color .15s;
   }
   .arg-desc__text{
     flex: 1 1 220px;
@@ -654,7 +657,7 @@
 /* ============================================================
    页面交互脚本
    1) 参数语法高亮 + 注入描述数据
-   2) 点击参数显示用途说明
+   2) 点击参数显示用途说明（描述名配色与参数保持一致）
    3) 复制按钮
    ============================================================ */
 (function () {
@@ -731,6 +734,25 @@
     '-Djdk.lang.Process.launchMechanism=FORK': '指定子进程启动方式为 fork，适配移动端。'
   };
 
+  /* ==========================================================
+     参数类别 → 配色映射
+     与 CSS 中 .arg--* 规则保持一致，
+     供描述面板左侧参数名同步背景色与文字色使用。
+     这样即使参数处于 is-active（有 filter 提亮）状态，
+     描述名仍能使用与原始参数完全一致的纯色值。
+     ========================================================== */
+  var ARG_STYLE_MAP = {
+    'arg--enable':  { color: '#7ee787', background: 'rgba(46,160,67,.15)'  },
+    'arg--disable': { color: '#ffa198', background: 'rgba(248,81,73,.15)'  },
+    'arg--value':   { color: '#79c0ff', background: 'rgba(56,139,253,.15)' },
+    'arg--memory':  { color: '#e3b341', background: 'rgba(187,128,9,.15)'  },
+    'arg--system':  { color: '#d2a8ff', background: 'rgba(163,113,247,.15)' },
+    'arg--plain':   { color: '#c9d1d9', background: 'rgba(110,118,129,.18)' }
+  };
+
+  /* 全部类别名，用于反查 span 所属类别 */
+  var ARG_CLASSES = Object.keys(ARG_STYLE_MAP);
+
   /* 默认提示文案 */
   var DEFAULT_NAME = '—';
   var DEFAULT_TEXT = '点击上方任意参数查看用途说明';
@@ -753,7 +775,36 @@
     if (/^-XX:/.test(arg))   return 'arg--value';    // -XX:Key=Value
     if (/^-D/.test(arg))     return 'arg--system';   // -D 系统属性
     if (/^-X/.test(arg))     return 'arg--memory';   // -Xmx / -Xms / -Xmn
+    return 'arg--plain';                             // 其他（兜底）
+  }
+
+  /**
+   * 找出 span 所属的类别名。
+   * 由于 span 上可能同时挂着 is-active 等状态类，
+   * 这里显式遍历已知类别列表进行匹配。
+   */
+  function findArgClass(span) {
+    for (var i = 0; i < ARG_CLASSES.length; i++) {
+      if (span.classList.contains(ARG_CLASSES[i])) return ARG_CLASSES[i];
+    }
     return 'arg--plain';
+  }
+
+  /**
+   * 将描述面板左侧参数名的配色同步为被点击参数的配色。
+   * 传入 span 时按类别取色；传入 null 时清空内联样式，恢复默认。
+   */
+  function syncNameStyle(nameEl, span) {
+    if (!span) {
+      nameEl.style.color = '';
+      nameEl.style.backgroundColor = '';
+      return;
+    }
+    var style = ARG_STYLE_MAP[findArgClass(span)];
+    if (style) {
+      nameEl.style.color = style.color;
+      nameEl.style.backgroundColor = style.background;
+    }
   }
 
   /* ==========================================================
@@ -808,6 +859,7 @@
       span.classList.remove('is-active');
       nameEl.textContent = DEFAULT_NAME;
       textEl.textContent = DEFAULT_TEXT;
+      syncNameStyle(nameEl, null);
       panel.classList.remove('is-active');
       return;
     }
@@ -821,6 +873,7 @@
     span.classList.add('is-active');
     nameEl.textContent = span.dataset.arg;
     textEl.textContent = span.dataset.desc || '暂无说明。';
+    syncNameStyle(nameEl, span);          // 配色与参数保持一致
     panel.classList.add('is-active');
   });
 
