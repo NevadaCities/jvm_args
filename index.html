@@ -7,6 +7,11 @@
 <meta name="darkreader-lock">
 <meta name="theme-color" content="#0d1117">
 <title>JVM 启动参数配置参考</title>
+
+<!-- 标题栏图标：浅色/深色模式各一套，随系统主题自动切换 -->
+<link rel="icon" type="image/svg+xml" media="(prefers-color-scheme: light)" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231f4e9c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3Cpath d='M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" media="(prefers-color-scheme: dark)" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237cb0ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3Cpath d='M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z'/%3E%3C/svg%3E">
+
 <style>
   /* ============================================================
      1. 设计令牌（Design Tokens）
@@ -132,7 +137,9 @@
   }
   section{ scroll-margin-top: 64px; }
 
-  /* 分区标题 */
+  /* 分区标题：
+     - word-break: keep-all     中英文按词换行，不从汉字或单词中间断开
+     - overflow-wrap: break-word 超长无空格串作为兜底才允许强制断开 */
   .section-title{
     margin: 40px 0 16px;
     padding-bottom: 8px;
@@ -140,6 +147,8 @@
     font-weight: 600;
     color: var(--text-strong);
     border-bottom: 1px solid var(--line);
+    word-break: keep-all;
+    overflow-wrap: break-word;
   }
   .section-title:first-of-type{ margin-top: 8px; }
 
@@ -149,6 +158,8 @@
     font-size: 16px;
     font-weight: 600;
     color: var(--text-strong);
+    word-break: keep-all;
+    overflow-wrap: break-word;
   }
 
   /* 分组标签（如“服务端 / 桌面端配置”） */
@@ -175,23 +186,26 @@
     border: 1px solid var(--line);
     border-radius: 5px;
   }
+
+  /* 卡片头部：标题组 + 复制按钮 */
   .card-head{
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 10px;
-    flex-wrap: wrap;
     margin-bottom: 12px;
   }
-  .card-head h3{
-    margin: 0;
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--text-strong);
+
+  /* 标题组：内联流动，徽章与标题文字共享同一行内文本流 */
+  .title-group{
+    flex: 1 1 auto;
+    min-width: 0;
   }
 
-  /* 版本徽章 */
+  /* 版本徽章：作为行内块元素，跟在标题文字的开头 */
   .badge{
-    flex: 0 0 auto;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
     padding: 2px 8px;
     font-size: 12px;
     font-weight: 600;
@@ -206,9 +220,21 @@
   .badge--java25 { color:#d2a8ff; background:rgba(163,113,247,.15);border-color:rgba(163,113,247,.45) }
   .badge--mobile { color:#ff7b72; background:rgba(248,81,73,.15);  border-color:rgba(248,81,73,.45) }
 
+  /* 标题文字：与徽章共享内联流，按词换行 */
+  .title-group h3{
+    display: inline;
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--text-strong);
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+
   /* 复制按钮 */
   .copy-btn{
-    margin-left: auto;
+    flex: 0 0 auto;
     padding: 4px 12px;
     font-family: inherit;
     font-size: 12.5px;
@@ -265,16 +291,17 @@
   .arg--value   { color:#79c0ff; background:rgba(56,139,253,.15) }  /* -XX:Key=Value */
   .arg--memory  { color:#e3b341; background:rgba(187,128,9,.15) }   /* -Xmx / -Xms / -Xmn */
   .arg--system  { color:#d2a8ff; background:rgba(163,113,247,.15) } /* -D 系统属性 */
-  .arg--plain   { color:#c9d1d9; background:rgba(110,118,129,.18) } /* 其他 */
+  .arg--plain   { color:#c9d1d9; background:rgba(110,118,129,.18) } /* 其他（兜底） */
 
   /* ============================================================
      8. 参数描述面板（点击参数后显示）
      ============================================================ */
   .arg-desc{
     display: flex;
+    flex-direction: column;
     align-items: flex-start;
-    gap: 10px;
-    flex-wrap: wrap;
+    gap: 6px;
+    overflow-x: auto;
     margin-top: 10px;
     padding: 10px 14px;
     background: var(--bg-input);
@@ -295,8 +322,26 @@
     to  { opacity: 1;  transform: none; }
   }
 
-  /* 描述面板左侧的参数名：默认态为中性色，
-     激活时由脚本同步为被点击参数的背景色与文字色 */
+  /* 细滚动条样式（WebKit 内核） */
+  .arg-desc::-webkit-scrollbar{ height: 6px; }
+  .arg-desc::-webkit-scrollbar-track{
+    background: rgba(255,255,255,.03);
+    border-radius: 3px;
+  }
+  .arg-desc::-webkit-scrollbar-thumb{
+    background: rgba(255,255,255,.15);
+    border-radius: 3px;
+  }
+  .arg-desc::-webkit-scrollbar-thumb:hover{
+    background: rgba(255,255,255,.28);
+  }
+  /* 细滚动条样式（Firefox） */
+  .arg-desc{
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,.18) rgba(255,255,255,.03);
+  }
+
+  /* 描述面板左侧的参数名：独占一行 */
   .arg-desc__name{
     flex: 0 0 auto;
     padding: 1px 6px;
@@ -305,12 +350,13 @@
     color: var(--text-muted);
     background: rgba(110,118,129,.18);
     border-radius: 3px;
-    word-break: break-all;
+    white-space: nowrap;
     transition: background-color .15s, color .15s;
   }
+  /* 描述文字：另起一行 */
   .arg-desc__text{
-    flex: 1 1 220px;
-    min-width: 0;
+    flex: 0 0 auto;
+    white-space: nowrap;
     line-height: 1.55;
   }
 
@@ -418,7 +464,6 @@
     main{ padding: 20px 14px 40px; }
     .card{ padding: 14px; }
     .args{ font-size: 11.8px; }
-    .copy-btn{ margin-left: 0; width: 100%; }
     .arg-desc{ padding: 9px 12px; }
   }
 </style>
@@ -448,8 +493,8 @@
     <a href="#shenandoah-uncommit">ShenandoahGC 归还（Java 25+）</a>
     <a href="#mobile8">手机版（Java 8）</a>
     <a href="#mobile9">手机版（Java 9+）</a>
-    <a href="#gc-threads">GC 线程数参考表格</a>
-    <a href="#young-gen">年轻代大小参考表格</a>
+    <a href="#gc-threads">Java 7 GC 线程数参考表格</a>
+    <a href="#young-gen">Java 7 年轻代大小 (-Xmn) 参考表格</a>
   </div>
 </nav>
 
@@ -464,8 +509,10 @@
   <section id="cms">
     <div class="card">
       <div class="card-head">
-        <span class="badge badge--java7">Java 7</span>
-        <h3>CMS GC + ParNew GC</h3>
+        <div class="title-group">
+          <span class="badge badge--java7">Java 7</span>
+          <h3>CMS GC + ParNew GC</h3>
+        </div>
         <button class="copy-btn" type="button">复制参数</button>
       </div>
       <div class="code-wrap">
@@ -478,8 +525,10 @@
   <section id="g1-fixed">
     <div class="card">
       <div class="card-head">
-        <span class="badge badge--java8">Java 8</span>
-        <h3>G1GC 固定 IHOP</h3>
+        <div class="title-group">
+          <span class="badge badge--java8">Java 8</span>
+          <h3>G1GC 固定 IHOP</h3>
+        </div>
         <button class="copy-btn" type="button">复制参数</button>
       </div>
       <div class="code-wrap">
@@ -492,8 +541,10 @@
   <section id="g1-adaptive">
     <div class="card">
       <div class="card-head">
-        <span class="badge badge--java9">Java 9+</span>
-        <h3>G1GC 动态 IHOP</h3>
+        <div class="title-group">
+          <span class="badge badge--java9">Java 9+</span>
+          <h3>G1GC 动态 IHOP</h3>
+        </div>
         <button class="copy-btn" type="button">复制参数</button>
       </div>
       <div class="code-wrap">
@@ -506,8 +557,10 @@
   <section id="g1-uncommit">
     <div class="card">
       <div class="card-head">
-        <span class="badge badge--java12">Java 12+</span>
-        <h3>G1GC 动态 IHOP 启用内存归还</h3>
+        <div class="title-group">
+          <span class="badge badge--java12">Java 12+</span>
+          <h3>G1GC 动态 IHOP 启用内存归还</h3>
+        </div>
         <button class="copy-btn" type="button">复制参数</button>
       </div>
       <div class="code-wrap">
@@ -520,8 +573,10 @@
   <section id="shenandoah">
     <div class="card">
       <div class="card-head">
-        <span class="badge badge--java25">Java 25+</span>
-        <h3>ShenandoahGC 分代模式 动态触发时机</h3>
+        <div class="title-group">
+          <span class="badge badge--java25">Java 25+</span>
+          <h3>ShenandoahGC 分代模式 动态触发时机</h3>
+        </div>
         <button class="copy-btn" type="button">复制参数</button>
       </div>
       <div class="code-wrap">
@@ -534,8 +589,10 @@
   <section id="shenandoah-uncommit">
     <div class="card">
       <div class="card-head">
-        <span class="badge badge--java25">Java 25+</span>
-        <h3>ShenandoahGC 分代模式 动态触发时机 启用内存归还</h3>
+        <div class="title-group">
+          <span class="badge badge--java25">Java 25+</span>
+          <h3>ShenandoahGC 分代模式 动态触发时机 启用内存归还</h3>
+        </div>
         <button class="copy-btn" type="button">复制参数</button>
       </div>
       <div class="code-wrap">
@@ -553,8 +610,10 @@
   <section id="mobile8">
     <div class="card">
       <div class="card-head">
-        <span class="badge badge--mobile">手机版 · Java 8</span>
-        <h3>手机版参数 固定 IHOP</h3>
+        <div class="title-group">
+          <span class="badge badge--mobile">手机版 · Java 8</span>
+          <h3>手机版参数 固定 IHOP</h3>
+        </div>
         <button class="copy-btn" type="button">复制参数</button>
       </div>
       <div class="code-wrap">
@@ -567,8 +626,10 @@
   <section id="mobile9">
     <div class="card">
       <div class="card-head">
-        <span class="badge badge--mobile">手机版 · Java 9+</span>
-        <h3>手机版参数 动态 IHOP</h3>
+        <div class="title-group">
+          <span class="badge badge--mobile">手机版 · Java 9+</span>
+          <h3>手机版参数 动态 IHOP</h3>
+        </div>
         <button class="copy-btn" type="button">复制参数</button>
       </div>
       <div class="code-wrap">
@@ -581,7 +642,7 @@
        Java 7 GC 线程数参考表格
        ========================================================== -->
   <section id="gc-threads">
-    <h2 class="section-title">Java 7参数GC线程数（ParallelGCThreads &amp; ConGCThreads）参考表格</h2>
+    <h2 class="section-title">Java 7 GC 线程数参考表格</h2>
 
     <div class="table-wrap">
       <table>
@@ -615,7 +676,7 @@
        Java 7 年轻代大小参考表格（含表格说明）
        ========================================================== -->
   <section id="young-gen">
-    <h2 class="section-title">Java 7参数年轻代大小（-Xmn）参考表格</h2>
+    <h2 class="section-title">Java 7 年轻代大小 (-Xmn) 参考表格</h2>
 
     <div class="table-wrap">
       <table>
@@ -656,18 +717,25 @@
 <script>
 /* ============================================================
    页面交互脚本
-   1) 参数语法高亮 + 注入描述数据
-   2) 点击参数显示用途说明（描述名配色与参数保持一致）
-   3) 复制按钮
+
+   架构说明：
+   1) 初始化阶段为每个 code.args 生成高亮 span，并在其后插入描述面板
+   2) 使用事件委托统一处理参数点击，避免为每个 span 单独绑定
+   3) 复制按钮读取卡片内缓存的原始参数文本，写入剪贴板
    ============================================================ */
 (function () {
   'use strict';
 
   /* ==========================================================
-     参数描述字典
-     键为参数的完整文本（含具体数值），值为简短用途说明
+     1. 常量与配置
      ========================================================== */
-  var ARG_DESCRIPTIONS = {
+
+  /**
+   * 参数用途说明字典。
+   * 键为参数的完整文本（含具体数值），值为简短的用途描述。
+   * 新增参数时在此补充，页面会自动展示对应描述。
+   */
+  const ARG_DESCRIPTIONS = {
     /* ---------- 堆与内存 ---------- */
     '-Xmx4096M': '堆内存最大值，限制 JVM 可用堆的上限。',
     '-Xms4096M': '堆内存初始值，与最大值相同可避免运行期扩容。',
@@ -734,41 +802,54 @@
     '-Djdk.lang.Process.launchMechanism=FORK': '指定子进程启动方式为 fork，适配移动端。'
   };
 
-  /* ==========================================================
-     参数类别 → 配色映射
-     与 CSS 中 .arg--* 规则保持一致，
-     供描述面板左侧参数名同步背景色与文字色使用。
-     这样即使参数处于 is-active（有 filter 提亮）状态，
-     描述名仍能使用与原始参数完全一致的纯色值。
-     ========================================================== */
-  var ARG_STYLE_MAP = {
-    'arg--enable':  { color: '#7ee787', background: 'rgba(46,160,67,.15)'  },
-    'arg--disable': { color: '#ffa198', background: 'rgba(248,81,73,.15)'  },
-    'arg--value':   { color: '#79c0ff', background: 'rgba(56,139,253,.15)' },
-    'arg--memory':  { color: '#e3b341', background: 'rgba(187,128,9,.15)'  },
+  /**
+   * 参数类别 → 配色映射。
+   * 注意：此处的色值必须与 CSS 中 .arg--* 规则保持同步，
+   *       修改任一侧都需要同步另一侧，否则描述面板配色会不一致。
+   *       之所以不用 getComputedStyle 读取，是因为 is-active 状态的
+   *       filter: brightness() 会干扰取色结果。
+   */
+  const ARG_STYLE_MAP = {
+    'arg--enable':  { color: '#7ee787', background: 'rgba(46,160,67,.15)'   },
+    'arg--disable': { color: '#ffa198', background: 'rgba(248,81,73,.15)'   },
+    'arg--value':   { color: '#79c0ff', background: 'rgba(56,139,253,.15)'  },
+    'arg--memory':  { color: '#e3b341', background: 'rgba(187,128,9,.15)'   },
     'arg--system':  { color: '#d2a8ff', background: 'rgba(163,113,247,.15)' },
     'arg--plain':   { color: '#c9d1d9', background: 'rgba(110,118,129,.18)' }
   };
 
-  /* 全部类别名，用于反查 span 所属类别 */
-  var ARG_CLASSES = Object.keys(ARG_STYLE_MAP);
+  /** 全部参数类别名，用于反查 span 所属类别。 */
+  const ARG_CLASSES = Object.keys(ARG_STYLE_MAP);
 
-  /* 默认提示文案 */
-  var DEFAULT_NAME = '—';
-  var DEFAULT_TEXT = '点击上方任意参数查看用途说明';
+  /** 描述面板默认状态下的占位文案。 */
+  const DEFAULT_NAME = '—';
+  const DEFAULT_TEXT = '点击上方任意参数查看用途说明';
+
+  /** 当参数不在字典中时的兜底描述。 */
+  const FALLBACK_DESC = '暂无说明。';
 
   /* ==========================================================
-     工具函数
+     2. 工具函数
      ========================================================== */
 
-  /** 转义 HTML 特殊字符，避免内容被解析为标签或破坏属性。 */
-  function escapeHtml(str) {
-    return String(str).replace(/[&<>"]/g, function (ch) {
+  /**
+   * 转义 HTML 特殊字符，避免内容被解析为标签或破坏属性值。
+   * @param {*} value - 待转义的值（自动转为字符串）
+   * @returns {string}  转义后的安全字符串
+   */
+  function escapeHtml(value) {
+    return String(value).replace(/[&<>"]/g, function (ch) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch];
     });
   }
 
-  /** 根据参数前缀判断语义类别，返回对应的 CSS 类名。 */
+  /**
+   * 根据参数前缀判断其语义类别。
+   * 判断顺序很重要：更具体的前缀必须放在更宽泛的前缀之前，
+   * 例如 -XX:+Flag 必须优先于 -XX: 判断。
+   * @param {string} arg - 单个 JVM 参数
+   * @returns {string}    对应的 CSS 类别名
+   */
   function classifyArg(arg) {
     if (/^-XX:\+/.test(arg)) return 'arg--enable';   // -XX:+Flag
     if (/^-XX:-/.test(arg))  return 'arg--disable';  // -XX:-Flag
@@ -779,12 +860,13 @@
   }
 
   /**
-   * 找出 span 所属的类别名。
-   * 由于 span 上可能同时挂着 is-active 等状态类，
-   * 这里显式遍历已知类别列表进行匹配。
+   * 查找 span 元素所属的参数类别。
+   * span 上可能同时挂有 is-active 等状态类，因此显式遍历已知类别。
+   * @param {HTMLElement} span
+   * @returns {string}    类别名
    */
   function findArgClass(span) {
-    for (var i = 0; i < ARG_CLASSES.length; i++) {
+    for (let i = 0; i < ARG_CLASSES.length; i++) {
       if (span.classList.contains(ARG_CLASSES[i])) return ARG_CLASSES[i];
     }
     return 'arg--plain';
@@ -792,7 +874,8 @@
 
   /**
    * 将描述面板左侧参数名的配色同步为被点击参数的配色。
-   * 传入 span 时按类别取色；传入 null 时清空内联样式，恢复默认。
+   * @param {HTMLElement} nameEl - 描述面板左侧的参数名元素
+   * @param {HTMLElement|null} span - 被点击的参数 span；传 null 表示恢复默认
    */
   function syncNameStyle(nameEl, span) {
     if (!span) {
@@ -800,7 +883,7 @@
       nameEl.style.backgroundColor = '';
       return;
     }
-    var style = ARG_STYLE_MAP[findArgClass(span)];
+    const style = ARG_STYLE_MAP[findArgClass(span)];
     if (style) {
       nameEl.style.color = style.color;
       nameEl.style.backgroundColor = style.background;
@@ -808,82 +891,137 @@
   }
 
   /* ==========================================================
-     语法高亮 + 注入描述数据
-     每个参数 span 携带 data-arg / data-desc 供点击时读取
+     3. 初始化：语法高亮 + 注入描述面板
      ========================================================== */
-  document.querySelectorAll('code.args').forEach(function (el) {
-    // 归一化空白，并缓存原始文本供复制使用
-    var raw = el.textContent.trim().replace(/\s+/g, ' ');
-    el.dataset.raw = raw;
 
-    // 按空格拆分并逐项着色，同时写入描述数据
-    el.innerHTML = raw
-      .split(' ')
-      .map(function (arg) {
-        var cls  = classifyArg(arg);
-        var desc = ARG_DESCRIPTIONS[arg] || '';
-        return '<span class="' + cls + '"'
-             + ' data-arg="'  + escapeHtml(arg)  + '"'
-             + ' data-desc="' + escapeHtml(desc) + '">'
-             + escapeHtml(arg)
-             + '</span>';
-      })
-      .join('');
+  /**
+   * 生成单个参数 span 的 HTML 字符串。
+   * @param {string} arg - 参数文本
+   * @returns {string}    含 data-arg / data-desc 的 span HTML
+   */
+  function renderArgSpan(arg) {
+    const cls  = classifyArg(arg);
+    const desc = ARG_DESCRIPTIONS[arg] || '';
+    return '<span class="' + cls + '"'
+         + ' data-arg="'  + escapeHtml(arg)  + '"'
+         + ' data-desc="' + escapeHtml(desc) + '">'
+         + escapeHtml(arg)
+         + '</span>';
+  }
 
-    // 在代码块之后插入描述面板
-    var panel = document.createElement('div');
-    panel.className = 'arg-desc';
-    panel.innerHTML =
-      '<code class="arg-desc__name">' + escapeHtml(DEFAULT_NAME) + '</code>' +
-      '<span class="arg-desc__text">' + escapeHtml(DEFAULT_TEXT) + '</span>';
-    el.parentNode.insertBefore(panel, el.nextSibling);
-  });
+  /** 构建描述面板的初始 HTML 内容。 */
+  function buildPanelHtml() {
+    return '<code class="arg-desc__name">' + escapeHtml(DEFAULT_NAME) + '</code>'
+         + '<span class="arg-desc__text">' + escapeHtml(DEFAULT_TEXT) + '</span>';
+  }
+
+  /**
+   * 对页面中所有 code.args 执行初始渲染：
+   * 1. 归一化原始文本并缓存到 data-raw（供复制使用）
+   * 2. 按空格拆分并逐项着色
+   * 3. 在代码块后插入描述面板
+   *
+   * 该函数具备幂等性：重复调用时会先移除旧的描述面板。
+   */
+  function initArgBlocks() {
+    // 幂等保护：移除已存在的描述面板，避免重复初始化
+    document.querySelectorAll('.arg-desc').forEach(function (el) {
+      el.parentNode.removeChild(el);
+    });
+
+    document.querySelectorAll('code.args').forEach(function (el) {
+      // 归一化空白，缓存原始文本供复制使用
+      const raw = el.textContent.trim().replace(/\s+/g, ' ');
+      el.dataset.raw = raw;
+
+      // 按空格拆分并逐项着色
+      el.innerHTML = raw.split(' ').map(renderArgSpan).join('');
+
+      // 在代码块之后插入描述面板
+      const panel = document.createElement('div');
+      panel.className = 'arg-desc';
+      panel.innerHTML = buildPanelHtml();
+      el.parentNode.insertBefore(panel, el.nextSibling);
+    });
+  }
 
   /* ==========================================================
-     点击参数显示描述
-     通过事件委托统一处理，避免为每个参数单独绑定
+     4. 交互：点击参数显示描述
      ========================================================== */
-  document.addEventListener('click', function (e) {
-    var span = e.target.closest('.args span');
-    if (!span) return;
 
-    var code  = span.closest('code.args');
-    var panel = code && code.nextElementSibling;
+  /**
+   * 将描述面板恢复到默认（未选中）状态。
+   * @param {HTMLElement} panel - 描述面板元素
+   */
+  function resetPanel(panel) {
+    const nameEl = panel.querySelector('.arg-desc__name');
+    const textEl = panel.querySelector('.arg-desc__text');
+    nameEl.textContent = DEFAULT_NAME;
+    textEl.textContent = DEFAULT_TEXT;
+    syncNameStyle(nameEl, null);
+    panel.classList.remove('is-active');
+    panel.scrollLeft = 0;
+  }
+
+  /**
+   * 处理单个参数点击：
+   * - 若当前参数已处于选中态，则取消选中并恢复默认面板
+   * - 否则清除同代码块内其他参数的选中态，激活当前参数
+   * @param {HTMLElement} span - 被点击的参数 span
+   */
+  function handleArgClick(span) {
+    const code = span.closest('code.args');
+    if (!code) return;
+
+    const panel = code.nextElementSibling;
     if (!panel || !panel.classList.contains('arg-desc')) return;
 
-    var nameEl = panel.querySelector('.arg-desc__name');
-    var textEl = panel.querySelector('.arg-desc__text');
-
-    // 再次点击同一参数 → 取消选中，恢复默认提示
+    // 再次点击同一参数 → 取消选中
     if (span.classList.contains('is-active')) {
       span.classList.remove('is-active');
-      nameEl.textContent = DEFAULT_NAME;
-      textEl.textContent = DEFAULT_TEXT;
-      syncNameStyle(nameEl, null);
-      panel.classList.remove('is-active');
+      resetPanel(panel);
       return;
     }
 
-    // 清除当前代码块内其他参数的选中状态
+    // 清除同代码块内其他参数的选中状态
     code.querySelectorAll('span.is-active').forEach(function (s) {
       s.classList.remove('is-active');
     });
 
     // 激活当前参数并更新描述面板
     span.classList.add('is-active');
+
+    const nameEl = panel.querySelector('.arg-desc__name');
+    const textEl = panel.querySelector('.arg-desc__text');
     nameEl.textContent = span.dataset.arg;
-    textEl.textContent = span.dataset.desc || '暂无说明。';
-    syncNameStyle(nameEl, span);          // 配色与参数保持一致
+    textEl.textContent = span.dataset.desc || FALLBACK_DESC;
+    syncNameStyle(nameEl, span);
+
     panel.classList.add('is-active');
+    panel.scrollLeft = 0;  // 切换参数时回到最左端
+  }
+
+  // 使用事件委托统一处理所有参数点击
+  document.addEventListener('click', function (e) {
+    // 防御性检查：e.target 可能不是 Element（如文本节点）
+    if (!(e.target instanceof Element)) return;
+
+    const span = e.target.closest('.args span');
+    if (span) handleArgClick(span);
   });
 
   /* ==========================================================
-     复制按钮
+     5. 复制按钮
      ========================================================== */
 
-  /** 使用旧版 execCommand 作为 Clipboard API 不可用时的降级方案。 */
+  /**
+   * Clipboard API 不可用时的降级复制方案。
+   * 通过临时 textarea + document.execCommand('copy') 实现。
+   * @param {string} text - 待复制的文本
+   * @param {Function} onSuccess - 复制成功后的回调
+   */
   function copyViaFallback(text, onSuccess) {
-    var ta = document.createElement('textarea');
+    const ta = document.createElement('textarea');
     ta.value = text;
     ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0';
     document.body.appendChild(ta);
@@ -892,41 +1030,57 @@
       document.execCommand('copy');
       onSuccess();
     } catch (err) {
-      /* 忽略复制失败 */
+      /* 静默忽略复制失败，避免打断用户操作 */
     }
     document.body.removeChild(ta);
   }
 
-  /** 恢复按钮默认样式。 */
-  function resetButton(btn) {
-    btn.textContent = '复制参数';
-    btn.classList.remove('is-copied');
-  }
-
-  /** 复制成功后的视觉反馈。 */
-  function showCopied(btn) {
+  /**
+   * 在按钮上显示复制成功的视觉反馈。
+   * @param {HTMLElement} btn - 复制按钮
+   */
+  function flashCopied(btn) {
     btn.textContent = '已复制';
     btn.classList.add('is-copied');
-    setTimeout(function () { resetButton(btn); }, 1600);
+    setTimeout(function () {
+      btn.textContent = '复制参数';
+      btn.classList.remove('is-copied');
+    }, 1600);
+  }
+
+  /**
+   * 处理单个复制按钮点击：收集当前卡片内全部参数文本，写入剪贴板。
+   * @param {HTMLElement} btn - 复制按钮
+   */
+  function handleCopyClick(btn) {
+    const card = btn.closest('.card');
+    if (!card) return;
+
+    // 收集当前卡片内的全部参数，按行拼接
+    const text = Array.prototype.map
+      .call(card.querySelectorAll('code.args'), function (c) {
+        return c.dataset.raw || '';
+      })
+      .join('\n');
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text)
+        .then(function () { flashCopied(btn); })
+        .catch(function () { copyViaFallback(text, function () { flashCopied(btn); }); });
+    } else {
+      copyViaFallback(text, function () { flashCopied(btn); });
+    }
   }
 
   document.querySelectorAll('.copy-btn').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      // 收集当前卡片内的全部参数，按行拼接
-      var card = btn.closest('.card');
-      var text = Array.prototype.map
-        .call(card.querySelectorAll('code.args'), function (c) { return c.dataset.raw; })
-        .join('\n');
-
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text)
-          .then(function () { showCopied(btn); })
-          .catch(function () { copyViaFallback(text, function () { showCopied(btn); }); });
-      } else {
-        copyViaFallback(text, function () { showCopied(btn); });
-      }
-    });
+    btn.addEventListener('click', function () { handleCopyClick(btn); });
   });
+
+  /* ==========================================================
+     6. 启动
+     ========================================================== */
+  initArgBlocks();
+
 })();
 </script>
 </body>
