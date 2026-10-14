@@ -3,10 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="color-scheme" content="dark">
-<meta name="darkreader-lock">
-<meta name="theme-color" content="#0d1117">
+<meta name="color-scheme" content="light dark">
 <title>JVM 启动参数配置参考</title>
+
+<!-- 浏览器主题色：随系统主题切换地址栏颜色 -->
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d1117" media="(prefers-color-scheme: dark)">
 
 <!-- 标题栏图标：浅色/深色模式各一套，随系统主题自动切换 -->
 <link rel="icon" type="image/svg+xml" media="(prefers-color-scheme: light)" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231f4e9c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3Cpath d='M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z'/%3E%3C/svg%3E">
@@ -15,32 +17,160 @@
 <style>
   /* ============================================================
      1. 设计令牌（Design Tokens）
+
+     默认定义浅色主题，暗色主题通过 prefers-color-scheme 覆盖。
+     所有颜色都以 CSS 变量形式暴露，便于主题切换与 JS 同步。
      ============================================================ */
   :root{
-    color-scheme: dark;
+    color-scheme: light dark;
+
+    /* ---- 浅色主题（默认） ---- */
 
     /* 文本 */
-    --text:        #e6edf3;
-    --text-strong: #f0f6fc;
-    --text-muted:  #8b949e;
-    --text-code:   #c9d1d9;
+    --text:        #1f2328;
+    --text-strong: #1f2328;
+    --text-muted:  #57606a;
+    --text-code:   #24292f;
 
     /* 背景 */
-    --bg:        #0d1117;
-    --bg-soft:   #161b22;
-    --bg-hover:  #1c2128;
-    --bg-input:  #21262d;
-    --bg-code:   rgba(110,118,129,.14);
+    --bg:        #ffffff;
+    --bg-soft:   #f6f8fa;
+    --bg-hover:  #eaeef2;
+    --bg-input:  #f6f8fa;
+    --bg-code:   #f6f8fa;
 
     /* 边框 */
-    --line:       #30363d;
-    --line-light: #21262d;
+    --line:       #d0d7de;
+    --line-light: #eaeef2;
 
     /* 强调色 */
-    --blue: #58a6ff;
+    --blue: #0969da;
+
+    /* 徽章配色（浅色） */
+    --badge-java7-color:  #7d4e00;
+    --badge-java7-bg:     #fff8c5;
+    --badge-java7-border: #e6c86e;
+    --badge-java8-color:  #116329;
+    --badge-java8-bg:     #dafbe1;
+    --badge-java8-border: #9fd7ae;
+    --badge-java9-color:  #0a3069;
+    --badge-java9-bg:     #ddf4ff;
+    --badge-java9-border: #9ecbff;
+    --badge-java12-color:  #0f5257;
+    --badge-java12-bg:     #d8f3f2;
+    --badge-java12-border: #96d5d3;
+    --badge-java25-color:  #6639ba;
+    --badge-java25-bg:     #fbefff;
+    --badge-java25-border: #d0b3f5;
+    --badge-mobile-color:  #a40e26;
+    --badge-mobile-bg:     #ffebe9;
+    --badge-mobile-border: #f5b8b6;
+
+    /* 参数配色（浅色） */
+    --arg-enable-color:  #116329;
+    --arg-enable-bg:     #dafbe1;
+    --arg-disable-color: #a40e26;
+    --arg-disable-bg:    #ffebe9;
+    --arg-value-color:   #0a3069;
+    --arg-value-bg:      #ddf4ff;
+    --arg-memory-color:  #7d4e00;
+    --arg-memory-bg:     #fff8c5;
+    --arg-system-color:  #6639ba;
+    --arg-system-bg:     #fbefff;
+    --arg-plain-color:   #24292f;
+    --arg-plain-bg:      #eaeef2;
+
+    /* 参数悬停/激活时的提亮或压暗滤镜 */
+    --arg-hover-filter:  brightness(0.94);
+    --arg-active-filter: brightness(0.88);
+
+    /* 细滚动条配色 */
+    --scrollbar-track:       rgba(0,0,0,.04);
+    --scrollbar-thumb:       rgba(0,0,0,.18);
+    --scrollbar-thumb-hover: rgba(0,0,0,.32);
+
+    /* 复制成功反馈 */
+    --copied-color:  #116329;
+    --copied-bg:     #dafbe1;
+    --copied-border: #9fd7ae;
 
     /* 字体 */
     --mono: Consolas,"SFMono-Regular",Menlo,Monaco,"Courier New",monospace;
+  }
+
+  /* ============================================================
+     1b. 暗色主题覆盖
+     ============================================================ */
+  @media (prefers-color-scheme: dark){
+    :root{
+      /* 文本 */
+      --text:        #e6edf3;
+      --text-strong: #f0f6fc;
+      --text-muted:  #8b949e;
+      --text-code:   #c9d1d9;
+
+      /* 背景 */
+      --bg:        #0d1117;
+      --bg-soft:   #161b22;
+      --bg-hover:  #1c2128;
+      --bg-input:  #21262d;
+      --bg-code:   rgba(110,118,129,.14);
+
+      /* 边框 */
+      --line:       #30363d;
+      --line-light: #21262d;
+
+      /* 强调色 */
+      --blue: #58a6ff;
+
+      /* 徽章配色（暗色） */
+      --badge-java7-color:  #e3b341;
+      --badge-java7-bg:     rgba(187,128,9,.15);
+      --badge-java7-border: rgba(187,128,9,.45);
+      --badge-java8-color:  #56d364;
+      --badge-java8-bg:     rgba(46,160,67,.15);
+      --badge-java8-border: rgba(46,160,67,.45);
+      --badge-java9-color:  #79c0ff;
+      --badge-java9-bg:     rgba(56,139,253,.15);
+      --badge-java9-border: rgba(56,139,253,.45);
+      --badge-java12-color:  #56d4dd;
+      --badge-java12-bg:     rgba(45,164,171,.15);
+      --badge-java12-border: rgba(45,164,171,.45);
+      --badge-java25-color:  #d2a8ff;
+      --badge-java25-bg:     rgba(163,113,247,.15);
+      --badge-java25-border: rgba(163,113,247,.45);
+      --badge-mobile-color:  #ff7b72;
+      --badge-mobile-bg:     rgba(248,81,73,.15);
+      --badge-mobile-border: rgba(248,81,73,.45);
+
+      /* 参数配色（暗色） */
+      --arg-enable-color:  #7ee787;
+      --arg-enable-bg:     rgba(46,160,67,.15);
+      --arg-disable-color: #ffa198;
+      --arg-disable-bg:    rgba(248,81,73,.15);
+      --arg-value-color:   #79c0ff;
+      --arg-value-bg:      rgba(56,139,253,.15);
+      --arg-memory-color:  #e3b341;
+      --arg-memory-bg:     rgba(187,128,9,.15);
+      --arg-system-color:  #d2a8ff;
+      --arg-system-bg:     rgba(163,113,247,.15);
+      --arg-plain-color:   #c9d1d9;
+      --arg-plain-bg:      rgba(110,118,129,.18);
+
+      /* 悬停/激活时提亮 */
+      --arg-hover-filter:  brightness(1.3);
+      --arg-active-filter: brightness(1.35);
+
+      /* 细滚动条配色 */
+      --scrollbar-track:       rgba(255,255,255,.03);
+      --scrollbar-thumb:       rgba(255,255,255,.15);
+      --scrollbar-thumb-hover: rgba(255,255,255,.28);
+
+      /* 复制成功反馈 */
+      --copied-color:  #56d364;
+      --copied-bg:     rgba(46,160,67,.18);
+      --copied-border: rgba(46,160,67,.55);
+    }
   }
 
   /* ============================================================
@@ -50,7 +180,7 @@
 
   html{
     scroll-behavior: smooth;
-    background: #0d1117;
+    background: var(--bg);
   }
 
   body{
@@ -123,7 +253,7 @@
   }
   nav a:hover{
     color: var(--blue);
-    background: rgba(56,139,253,.1);
+    background: color-mix(in srgb, var(--blue) 10%, transparent);
     text-decoration: underline;
   }
 
@@ -168,7 +298,7 @@
     padding: 8px 12px;
     background: var(--bg-soft);
     border: 1px solid var(--line);
-    border-left: 3px solid #6e7681;
+    border-left: 3px solid var(--text-muted);
     border-radius: 3px;
     font-size: 15px;
     font-weight: 600;
@@ -213,12 +343,12 @@
     border: 1px solid;
     border-radius: 3px;
   }
-  .badge--java7  { color:#e3b341; background:rgba(187,128,9,.15);  border-color:rgba(187,128,9,.45) }
-  .badge--java8  { color:#56d364; background:rgba(46,160,67,.15);  border-color:rgba(46,160,67,.45) }
-  .badge--java9  { color:#79c0ff; background:rgba(56,139,253,.15); border-color:rgba(56,139,253,.45) }
-  .badge--java12 { color:#56d4dd; background:rgba(45,164,171,.15); border-color:rgba(45,164,171,.45) }
-  .badge--java25 { color:#d2a8ff; background:rgba(163,113,247,.15);border-color:rgba(163,113,247,.45) }
-  .badge--mobile { color:#ff7b72; background:rgba(248,81,73,.15);  border-color:rgba(248,81,73,.45) }
+  .badge--java7  { color: var(--badge-java7-color);  background: var(--badge-java7-bg);  border-color: var(--badge-java7-border) }
+  .badge--java8  { color: var(--badge-java8-color);  background: var(--badge-java8-bg);  border-color: var(--badge-java8-border) }
+  .badge--java9  { color: var(--badge-java9-color);  background: var(--badge-java9-bg);  border-color: var(--badge-java9-border) }
+  .badge--java12 { color: var(--badge-java12-color); background: var(--badge-java12-bg); border-color: var(--badge-java12-border) }
+  .badge--java25 { color: var(--badge-java25-color); background: var(--badge-java25-bg); border-color: var(--badge-java25-border) }
+  .badge--mobile { color: var(--badge-mobile-color); background: var(--badge-mobile-bg); border-color: var(--badge-mobile-border) }
 
   /* 标题文字：与徽章共享内联流，按词换行 */
   .title-group h3{
@@ -245,12 +375,15 @@
     cursor: pointer;
     transition: background .15s, border-color .15s;
   }
-  .copy-btn:hover{ background: var(--line); border-color: #484f58; }
-  .copy-btn:active{ background: #3c444d; }
+  .copy-btn:hover{
+    background: var(--bg-hover);
+    border-color: var(--text-muted);
+  }
+  .copy-btn:active{ background: var(--line-light); }
   .copy-btn.is-copied{
-    color: #56d364;
-    background: rgba(46,160,67,.18);
-    border-color: rgba(46,160,67,.55);
+    color: var(--copied-color);
+    background: var(--copied-bg);
+    border-color: var(--copied-border);
   }
 
   /* ============================================================
@@ -279,19 +412,19 @@
     cursor: pointer;
     transition: filter .15s, box-shadow .15s;
   }
-  .args span:hover{ filter: brightness(1.3); }
+  .args span:hover{ filter: var(--arg-hover-filter); }
   .args span.is-active{
     box-shadow: 0 0 0 2px var(--blue);
-    filter: brightness(1.35);
+    filter: var(--arg-active-filter);
   }
 
-  /* 参数着色：按语义分类 */
-  .arg--enable  { color:#7ee787; background:rgba(46,160,67,.15) }   /* -XX:+Flag */
-  .arg--disable { color:#ffa198; background:rgba(248,81,73,.15) }   /* -XX:-Flag */
-  .arg--value   { color:#79c0ff; background:rgba(56,139,253,.15) }  /* -XX:Key=Value */
-  .arg--memory  { color:#e3b341; background:rgba(187,128,9,.15) }   /* -Xmx / -Xms / -Xmn */
-  .arg--system  { color:#d2a8ff; background:rgba(163,113,247,.15) } /* -D 系统属性 */
-  .arg--plain   { color:#c9d1d9; background:rgba(110,118,129,.18) } /* 其他（兜底） */
+  /* 参数着色：按语义分类（走 CSS 变量，随主题切换） */
+  .arg--enable  { color: var(--arg-enable-color);  background: var(--arg-enable-bg)  }
+  .arg--disable { color: var(--arg-disable-color); background: var(--arg-disable-bg) }
+  .arg--value   { color: var(--arg-value-color);   background: var(--arg-value-bg)   }
+  .arg--memory  { color: var(--arg-memory-color);  background: var(--arg-memory-bg)  }
+  .arg--system  { color: var(--arg-system-color);  background: var(--arg-system-bg)  }
+  .arg--plain   { color: var(--arg-plain-color);   background: var(--arg-plain-bg)   }
 
   /* ============================================================
      8. 参数描述面板（点击参数后显示）
@@ -306,11 +439,13 @@
     padding: 10px 14px;
     background: var(--bg-input);
     border: 1px solid var(--line);
-    border-left: 3px solid #6e7681;
+    border-left: 3px solid var(--text-muted);
     border-radius: 4px;
     font-size: 13.5px;
     color: var(--text-muted);
     transition: border-color .15s, color .15s;
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
   }
   .arg-desc.is-active{
     border-left-color: var(--blue);
@@ -325,30 +460,25 @@
   /* 细滚动条样式（WebKit 内核） */
   .arg-desc::-webkit-scrollbar{ height: 6px; }
   .arg-desc::-webkit-scrollbar-track{
-    background: rgba(255,255,255,.03);
+    background: var(--scrollbar-track);
     border-radius: 3px;
   }
   .arg-desc::-webkit-scrollbar-thumb{
-    background: rgba(255,255,255,.15);
+    background: var(--scrollbar-thumb);
     border-radius: 3px;
   }
   .arg-desc::-webkit-scrollbar-thumb:hover{
-    background: rgba(255,255,255,.28);
-  }
-  /* 细滚动条样式（Firefox） */
-  .arg-desc{
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255,255,255,.18) rgba(255,255,255,.03);
+    background: var(--scrollbar-thumb-hover);
   }
 
-  /* 描述面板左侧的参数名：独占一行 */
+  /* 描述面板左侧的参数名：默认中性色，激活时由 JS 同步为参数配色 */
   .arg-desc__name{
     flex: 0 0 auto;
     padding: 1px 6px;
     font-family: var(--mono);
     font-size: 12.5px;
     color: var(--text-muted);
-    background: rgba(110,118,129,.18);
+    background: var(--arg-plain-bg);
     border-radius: 3px;
     white-space: nowrap;
     transition: background-color .15s, color .15s;
@@ -404,7 +534,7 @@
     padding: 10px 14px;
     background: var(--bg-soft);
     border: 1px solid var(--line);
-    border-left: 3px solid #6e7681;
+    border-left: 3px solid var(--text-muted);
     border-radius: 3px;
     font-family: var(--mono);
     font-size: 13px;
@@ -722,6 +852,8 @@
    1) 初始化阶段为每个 code.args 生成高亮 span，并在其后插入描述面板
    2) 使用事件委托统一处理参数点击，避免为每个 span 单独绑定
    3) 复制按钮读取卡片内缓存的原始参数文本，写入剪贴板
+   4) 描述面板左侧参数名的配色通过 CSS 变量注入，
+      主题切换时浏览器会自动重新计算，无需 JS 监听
    ============================================================ */
 (function () {
   'use strict';
@@ -803,23 +935,19 @@
   };
 
   /**
-   * 参数类别 → 配色映射。
-   * 注意：此处的色值必须与 CSS 中 .arg--* 规则保持同步，
-   *       修改任一侧都需要同步另一侧，否则描述面板配色会不一致。
-   *       之所以不用 getComputedStyle 读取，是因为 is-active 状态的
-   *       filter: brightness() 会干扰取色结果。
+   * 参数类别名列表。
+   * 类别到配色不再由 JS 硬编码，而是通过 CSS 变量（--arg-*-color / --arg-*-bg）
+   * 在样式表中定义；JS 只在描述面板上注入 var(--...) 引用，
+   * 主题切换时浏览器自动重新计算，无需监听变化。
    */
-  const ARG_STYLE_MAP = {
-    'arg--enable':  { color: '#7ee787', background: 'rgba(46,160,67,.15)'   },
-    'arg--disable': { color: '#ffa198', background: 'rgba(248,81,73,.15)'   },
-    'arg--value':   { color: '#79c0ff', background: 'rgba(56,139,253,.15)'  },
-    'arg--memory':  { color: '#e3b341', background: 'rgba(187,128,9,.15)'   },
-    'arg--system':  { color: '#d2a8ff', background: 'rgba(163,113,247,.15)' },
-    'arg--plain':   { color: '#c9d1d9', background: 'rgba(110,118,129,.18)' }
-  };
-
-  /** 全部参数类别名，用于反查 span 所属类别。 */
-  const ARG_CLASSES = Object.keys(ARG_STYLE_MAP);
+  const ARG_CLASSES = [
+    'arg--enable',
+    'arg--disable',
+    'arg--value',
+    'arg--memory',
+    'arg--system',
+    'arg--plain'
+  ];
 
   /** 描述面板默认状态下的占位文案。 */
   const DEFAULT_NAME = '—';
@@ -874,6 +1002,7 @@
 
   /**
    * 将描述面板左侧参数名的配色同步为被点击参数的配色。
+   * 注入的是 CSS 变量引用而非固定色值，主题切换时自动跟随。
    * @param {HTMLElement} nameEl - 描述面板左侧的参数名元素
    * @param {HTMLElement|null} span - 被点击的参数 span；传 null 表示恢复默认
    */
@@ -883,11 +1012,9 @@
       nameEl.style.backgroundColor = '';
       return;
     }
-    const style = ARG_STYLE_MAP[findArgClass(span)];
-    if (style) {
-      nameEl.style.color = style.color;
-      nameEl.style.backgroundColor = style.background;
-    }
+    const prefix = findArgClass(span).replace('arg--', 'arg-');
+    nameEl.style.color = 'var(--' + prefix + '-color)';
+    nameEl.style.backgroundColor = 'var(--' + prefix + '-bg)';
   }
 
   /* ==========================================================
