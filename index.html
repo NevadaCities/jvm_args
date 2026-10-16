@@ -647,7 +647,7 @@
         <button class="copy-btn" type="button">复制参数</button>
       </div>
       <div class="code-wrap">
-        <code class="args">-Xmx4096M -Xms4096M -Xmn1024M -XX:PermSize=256M -XX:MaxPermSize=512M -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:+CMSClassUnloadingEnabled -XX:+ExplicitGCInvokesConcurrent -XX:+AlwaysPreTouch -XX:SurvivorRatio=25 -XX:MaxTenuringThreshold=1 -XX:TargetSurvivorRatio=90 -XX:CMSInitiatingOccupancyFraction=60 -XX:+UseCMSInitiatingOccupancyOnly -XX:+CMSScavengeBeforeRemark -XX:+CMSParallelRemarkEnabled -XX:+CMSConcurrentMTEnabled -XX:+UseCMSCompactAtFullCollection -XX:CMSFullGCsBeforeCompaction=1 -XX:ParallelGCThreads=12 -XX:ConcGCThreads=4 -XX:ReservedCodeCacheSize=384M -XX:+UseCodeCacheFlushing</code>
+        <code class="args">-Xmx4096M -Xms4096M -Xmn1024M -XX:PermSize=256M -XX:MaxPermSize=512M -XX:+ResizeTLAB -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:+CMSClassUnloadingEnabled -XX:+ExplicitGCInvokesConcurrent -XX:+AlwaysPreTouch -XX:SurvivorRatio=25 -XX:MaxTenuringThreshold=1 -XX:TargetSurvivorRatio=90 -XX:CMSInitiatingOccupancyFraction=60 -XX:+UseCMSInitiatingOccupancyOnly -XX:+CMSScavengeBeforeRemark -XX:+CMSParallelRemarkEnabled -XX:+CMSConcurrentMTEnabled -XX:+UseCMSCompactAtFullCollection -XX:CMSFullGCsBeforeCompaction=1 -XX:ParallelGCThreads=12 -XX:ConcGCThreads=4 -XX:ReservedCodeCacheSize=384M -XX:+UseCodeCacheFlushing</code>
       </div>
     </div>
   </section>
@@ -663,7 +663,7 @@
         <button class="copy-btn" type="button">复制参数</button>
       </div>
       <div class="code-wrap">
-        <code class="args">-XX:+ExplicitGCInvokesConcurrent -XX:ReservedCodeCacheSize=384M -XX:+UseCodeCacheFlushing -XX:+AlwaysPreTouch -XX:+UseG1GC -XX:MaxGCPauseMillis=25 -XX:GCPauseIntervalMillis=50 -XX:InitiatingHeapOccupancyPercent=45 -XX:+UseAdaptiveSizePolicy -XX:+UseDynamicNumberOfGCThreads</code>
+        <code class="args">-XX:+ResizeTLAB -XX:+ExplicitGCInvokesConcurrent -XX:ReservedCodeCacheSize=384M -XX:+UseCodeCacheFlushing -XX:+AlwaysPreTouch -XX:+UseG1GC -XX:MaxGCPauseMillis=25 -XX:GCPauseIntervalMillis=50 -XX:InitiatingHeapOccupancyPercent=45 -XX:+UseAdaptiveSizePolicy -XX:+UseDynamicNumberOfGCThreads</code>
       </div>
     </div>
   </section>
@@ -679,7 +679,7 @@
         <button class="copy-btn" type="button">复制参数</button>
       </div>
       <div class="code-wrap">
-        <code class="args">-XX:+ExplicitGCInvokesConcurrent -XX:ReservedCodeCacheSize=384M -XX:+SegmentedCodeCache -XX:+UseCodeCacheFlushing -XX:+AlwaysPreTouch -XX:+UseG1GC -XX:MaxGCPauseMillis=25 -XX:GCPauseIntervalMillis=50 -XX:+G1UseAdaptiveIHOP -XX:+UseAdaptiveSizePolicy -XX:+UseDynamicNumberOfGCThreads</code>
+        <code class="args">-XX:+ResizeTLAB -XX:+ExplicitGCInvokesConcurrent -XX:ReservedCodeCacheSize=384M -XX:+SegmentedCodeCache -XX:+UseCodeCacheFlushing -XX:+AlwaysPreTouch -XX:+UseG1GC -XX:MaxGCPauseMillis=25 -XX:GCPauseIntervalMillis=50 -XX:+G1UseAdaptiveIHOP -XX:+UseAdaptiveSizePolicy -XX:+UseDynamicNumberOfGCThreads</code>
       </div>
     </div>
   </section>
@@ -695,7 +695,7 @@
         <button class="copy-btn" type="button">复制参数</button>
       </div>
       <div class="code-wrap">
-        <code class="args">-XX:+ExplicitGCInvokesConcurrent -XX:ReservedCodeCacheSize=384M -XX:+SegmentedCodeCache -XX:+UseCodeCacheFlushing -XX:+UseG1GC -XX:MaxGCPauseMillis=50 -XX:+G1UseAdaptiveIHOP -XX:+UseAdaptiveSizePolicy -XX:+UseDynamicNumberOfGCThreads -XX:G1PeriodicGCInterval=30000 -XX:+G1PeriodicGCInvokesConcurrent</code>
+        <code class="args">-XX:+ResizeTLAB -XX:+ExplicitGCInvokesConcurrent -XX:ReservedCodeCacheSize=384M -XX:+SegmentedCodeCache -XX:+UseCodeCacheFlushing -XX:+UseG1GC -XX:MaxGCPauseMillis=50 -XX:+G1UseAdaptiveIHOP -XX:+UseAdaptiveSizePolicy -XX:+UseDynamicNumberOfGCThreads -XX:G1PeriodicGCInterval=30000 -XX:+G1PeriodicGCInvokesConcurrent</code>
       </div>
     </div>
   </section>
@@ -711,7 +711,7 @@
         <button class="copy-btn" type="button">复制参数</button>
       </div>
       <div class="code-wrap">
-        <code class="args">-XX:+ExplicitGCInvokesConcurrent -XX:ReservedCodeCacheSize=384M -XX:+SegmentedCodeCache -XX:+UseCodeCacheFlushing -XX:+AlwaysPreTouch -XX:+UseCompactObjectHeaders -XX:+UseShenandoahGC -XX:ShenandoahGCMode=generational -XX:ShenandoahGCHeuristics=adaptive</code>
+        <code class="args">-XX:+ResizeTLAB -XX:+ExplicitGCInvokesConcurrent -XX:ReservedCodeCacheSize=384M -XX:+SegmentedCodeCache -XX:+UseCodeCacheFlushing -XX:+AlwaysPreTouch -XX:+UseCompactObjectHeaders -XX:+UseShenandoahGC -XX:ShenandoahGCMode=generational -XX:ShenandoahGCHeuristics=adaptive</code>
       </div>
     </div>
   </section>
@@ -727,7 +727,7 @@
         <button class="copy-btn" type="button">复制参数</button>
       </div>
       <div class="code-wrap">
-        <code class="args">-XX:+UnlockExperimentalVMOptions -XX:+ExplicitGCInvokesConcurrent -XX:ReservedCodeCacheSize=384M -XX:+SegmentedCodeCache -XX:+UseCodeCacheFlushing -XX:+UseCompactObjectHeaders -XX:+UseShenandoahGC -XX:ShenandoahGCMode=generational -XX:ShenandoahGCHeuristics=adaptive -XX:+ShenandoahUncommit -XX:ShenandoahUncommitDelay=30000</code>
+        <code class="args">-XX:+UnlockExperimentalVMOptions -XX:+ResizeTLAB -XX:+ExplicitGCInvokesConcurrent -XX:ReservedCodeCacheSize=384M -XX:+SegmentedCodeCache -XX:+UseCodeCacheFlushing -XX:+UseCompactObjectHeaders -XX:+UseShenandoahGC -XX:ShenandoahGCMode=generational -XX:ShenandoahGCHeuristics=adaptive -XX:+ShenandoahUncommit -XX:ShenandoahUncommitDelay=30000</code>
       </div>
     </div>
   </section>
@@ -748,7 +748,7 @@
         <button class="copy-btn" type="button">复制参数</button>
       </div>
       <div class="code-wrap">
-        <code class="args">-XX:+ExplicitGCInvokesConcurrent -XX:ReservedCodeCacheSize=384M -XX:+UseCodeCacheFlushing -XX:+AlwaysPreTouch -XX:+UseG1GC -XX:MaxGCPauseMillis=50 -XX:InitiatingHeapOccupancyPercent=45 -XX:+UseAdaptiveSizePolicy -XX:+UseDynamicNumberOfGCThreads -XX:-UseNUMA -XX:ActiveProcessorCount=8 -Djdk.lang.Process.launchMechanism=FORK</code>
+        <code class="args">-XX:+ResizeTLAB -XX:+ExplicitGCInvokesConcurrent -XX:ReservedCodeCacheSize=384M -XX:+UseCodeCacheFlushing -XX:+AlwaysPreTouch -XX:+UseG1GC -XX:MaxGCPauseMillis=50 -XX:InitiatingHeapOccupancyPercent=45 -XX:+UseAdaptiveSizePolicy -XX:+UseDynamicNumberOfGCThreads -XX:-UseNUMA -XX:ActiveProcessorCount=8 -Djdk.lang.Process.launchMechanism=FORK</code>
       </div>
     </div>
   </section>
@@ -764,7 +764,7 @@
         <button class="copy-btn" type="button">复制参数</button>
       </div>
       <div class="code-wrap">
-        <code class="args">-XX:+ExplicitGCInvokesConcurrent -XX:ReservedCodeCacheSize=384M -XX:+SegmentedCodeCache -XX:+UseCodeCacheFlushing -XX:+AlwaysPreTouch -XX:+UseG1GC -XX:MaxGCPauseMillis=50 -XX:+G1UseAdaptiveIHOP -XX:+UseAdaptiveSizePolicy -XX:+UseDynamicNumberOfGCThreads -XX:-UseNUMA -XX:ActiveProcessorCount=8 -Djdk.lang.Process.launchMechanism=FORK</code>
+        <code class="args">-XX:+ResizeTLAB -XX:+ExplicitGCInvokesConcurrent -XX:ReservedCodeCacheSize=384M -XX:+SegmentedCodeCache -XX:+UseCodeCacheFlushing -XX:+AlwaysPreTouch -XX:+UseG1GC -XX:MaxGCPauseMillis=50 -XX:+G1UseAdaptiveIHOP -XX:+UseAdaptiveSizePolicy -XX:+UseDynamicNumberOfGCThreads -XX:-UseNUMA -XX:ActiveProcessorCount=8 -Djdk.lang.Process.launchMechanism=FORK</code>
       </div>
     </div>
   </section>
@@ -869,6 +869,9 @@
    * 新增参数时在此补充，页面会自动展示对应描述。
    */
   const ARG_DESCRIPTIONS = {
+    /* ---------- TLAB ---------- */
+    '-XX:+ResizeTLAB': '启用 TLAB 大小自适应调整，减少线程间内存分配竞争。',
+
     /* ---------- 堆与内存 ---------- */
     '-Xmx4096M': '堆内存最大值，限制 JVM 可用堆的上限。',
     '-Xms4096M': '堆内存初始值，与最大值相同可避免运行期扩容。',
