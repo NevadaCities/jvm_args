@@ -18,9 +18,6 @@
 <style>
   /* ============================================================
      1. 设计令牌（Design Tokens）
-
-     默认定义浅色主题，暗色主题通过 prefers-color-scheme 覆盖。
-     所有颜色都以 CSS 变量形式暴露，便于主题切换与 JS 同步。
      ============================================================ */
   :root{
     color-scheme: light dark;
@@ -57,15 +54,18 @@
     --badge-java9-color:  #0a3069;
     --badge-java9-bg:     #ddf4ff;
     --badge-java9-border: #9ecbff;
-    --badge-java12-color:  #0f5257;
-    --badge-java12-bg:     #d8f3f2;
-    --badge-java12-border: #96d5d3;
-    --badge-java25-color:  #6639ba;
-    --badge-java25-bg:     #fbefff;
-    --badge-java25-border: #d0b3f5;
-    --badge-mobile-color:  #a40e26;
-    --badge-mobile-bg:     #ffebe9;
-    --badge-mobile-border: #f5b8b6;
+    --badge-java12-color: #0f5257;
+    --badge-java12-bg:    #d8f3f2;
+    --badge-java12-border:#96d5d3;
+    --badge-java21-color: #1d4ed8;
+    --badge-java21-bg:    #dbeafe;
+    --badge-java21-border:#93c5fd;
+    --badge-java25-color: #6639ba;
+    --badge-java25-bg:    #fbefff;
+    --badge-java25-border:#d0b3f5;
+    --badge-mobile-color: #a40e26;
+    --badge-mobile-bg:    #ffebe9;
+    --badge-mobile-border:#f5b8b6;
 
     /* 参数配色（浅色） */
     --arg-enable-color:  #116329;
@@ -81,16 +81,16 @@
     --arg-plain-color:   #24292f;
     --arg-plain-bg:      #eaeef2;
 
-    /* 参数悬停/激活时的提亮或压暗滤镜 */
+    /* 悬停/激活时滤镜 */
     --arg-hover-filter:  brightness(0.94);
     --arg-active-filter: brightness(0.88);
 
-    /* 细滚动条配色 */
+    /* 滚动条 */
     --scrollbar-track:       rgba(0,0,0,.04);
     --scrollbar-thumb:       rgba(0,0,0,.18);
     --scrollbar-thumb-hover: rgba(0,0,0,.32);
 
-    /* 复制成功反馈 */
+    /* 复制反馈 */
     --copied-color:  #116329;
     --copied-bg:     #dafbe1;
     --copied-border: #9fd7ae;
@@ -134,15 +134,18 @@
       --badge-java9-color:  #79c0ff;
       --badge-java9-bg:     rgba(56,139,253,.15);
       --badge-java9-border: rgba(56,139,253,.45);
-      --badge-java12-color:  #56d4dd;
-      --badge-java12-bg:     rgba(45,164,171,.15);
-      --badge-java12-border: rgba(45,164,171,.45);
-      --badge-java25-color:  #d2a8ff;
-      --badge-java25-bg:     rgba(163,113,247,.15);
-      --badge-java25-border: rgba(163,113,247,.45);
-      --badge-mobile-color:  #ff7b72;
-      --badge-mobile-bg:     rgba(248,81,73,.15);
-      --badge-mobile-border: rgba(248,81,73,.45);
+      --badge-java12-color: #56d4dd;
+      --badge-java12-bg:    rgba(45,164,171,.15);
+      --badge-java12-border:rgba(45,164,171,.45);
+      --badge-java21-color: #60a5fa;
+      --badge-java21-bg:    rgba(59,130,246,.15);
+      --badge-java21-border:rgba(59,130,246,.45);
+      --badge-java25-color: #d2a8ff;
+      --badge-java25-bg:    rgba(163,113,247,.15);
+      --badge-java25-border:rgba(163,113,247,.45);
+      --badge-mobile-color: #ff7b72;
+      --badge-mobile-bg:    rgba(248,81,73,.15);
+      --badge-mobile-border:rgba(248,81,73,.45);
 
       /* 参数配色（暗色） */
       --arg-enable-color:  #7ee787;
@@ -158,16 +161,16 @@
       --arg-plain-color:   #c9d1d9;
       --arg-plain-bg:      rgba(110,118,129,.18);
 
-      /* 悬停/激活时提亮 */
+      /* 悬停/激活时滤镜 */
       --arg-hover-filter:  brightness(1.3);
       --arg-active-filter: brightness(1.35);
 
-      /* 细滚动条配色 */
+      /* 滚动条 */
       --scrollbar-track:       rgba(255,255,255,.03);
       --scrollbar-thumb:       rgba(255,255,255,.15);
       --scrollbar-thumb-hover: rgba(255,255,255,.28);
 
-      /* 复制成功反馈 */
+      /* 复制反馈 */
       --copied-color:  #56d364;
       --copied-bg:     rgba(46,160,67,.18);
       --copied-border: rgba(46,160,67,.55);
@@ -178,19 +181,12 @@
      2. 基础重置
      ============================================================ */
   *{ box-sizing: border-box; }
-
-  html{
-    scroll-behavior: smooth;
-    background: var(--bg);
-  }
-
+  html{ scroll-behavior: smooth; background: var(--bg); }
   body{
     margin: 0;
     background: var(--bg);
     color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
-                 "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB",
-                 Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", Arial, sans-serif;
     font-size: 15px;
     line-height: 1.65;
     -webkit-font-smoothing: antialiased;
@@ -204,10 +200,7 @@
     background: var(--bg-soft);
     border-bottom: 1px solid var(--line);
   }
-  .page-header .inner{
-    max-width: 1000px;
-    margin: 0 auto;
-  }
+  .page-header .inner{ max-width: 1000px; margin: 0 auto; }
   .page-header h1{
     margin: 0 0 10px;
     font-size: 26px;
@@ -242,7 +235,6 @@
     scrollbar-width: none;
   }
   nav .nav-inner::-webkit-scrollbar{ display: none; }
-
   nav a{
     flex: 0 0 auto;
     padding: 5px 10px;
@@ -261,16 +253,9 @@
   /* ============================================================
      5. 主布局
      ============================================================ */
-  main{
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 28px 20px 56px;
-  }
+  main{ max-width: 1000px; margin: 0 auto; padding: 28px 20px 56px; }
   section{ scroll-margin-top: 64px; }
 
-  /* 分区标题：
-     - word-break: keep-all     中英文按词换行，不从汉字或单词中间断开
-     - overflow-wrap: break-word 超长无空格串作为兜底才允许强制断开 */
   .section-title{
     margin: 40px 0 16px;
     padding-bottom: 8px;
@@ -283,7 +268,6 @@
   }
   .section-title:first-of-type{ margin-top: 8px; }
 
-  /* 次级标题 */
   .sub-title{
     margin: 32px 0 14px;
     font-size: 16px;
@@ -293,7 +277,6 @@
     overflow-wrap: break-word;
   }
 
-  /* 分组标签（如“服务端 / 桌面端配置”） */
   .group-label{
     margin: 40px 0 16px;
     padding: 8px 12px;
@@ -317,22 +300,17 @@
     border: 1px solid var(--line);
     border-radius: 5px;
   }
-
-  /* 卡片头部：标题组 + 复制按钮 */
   .card-head{
     display: flex;
     align-items: flex-start;
     gap: 10px;
     margin-bottom: 12px;
   }
-
-  /* 标题组：内联流动，徽章与标题文字共享同一行内文本流 */
   .title-group{
     flex: 1 1 auto;
     min-width: 0;
   }
 
-  /* 版本徽章：作为行内块元素，跟在标题文字的开头 */
   .badge{
     display: inline-block;
     vertical-align: middle;
@@ -348,10 +326,10 @@
   .badge--java8  { color: var(--badge-java8-color);  background: var(--badge-java8-bg);  border-color: var(--badge-java8-border) }
   .badge--java9  { color: var(--badge-java9-color);  background: var(--badge-java9-bg);  border-color: var(--badge-java9-border) }
   .badge--java12 { color: var(--badge-java12-color); background: var(--badge-java12-bg); border-color: var(--badge-java12-border) }
+  .badge--java21 { color: var(--badge-java21-color); background: var(--badge-java21-bg); border-color: var(--badge-java21-border) }
   .badge--java25 { color: var(--badge-java25-color); background: var(--badge-java25-bg); border-color: var(--badge-java25-border) }
   .badge--mobile { color: var(--badge-mobile-color); background: var(--badge-mobile-bg); border-color: var(--badge-mobile-border) }
 
-  /* 标题文字：与徽章共享内联流，按词换行 */
   .title-group h3{
     display: inline;
     margin: 0;
@@ -363,7 +341,6 @@
     overflow-wrap: break-word;
   }
 
-  /* 复制按钮 */
   .copy-btn{
     flex: 0 0 auto;
     padding: 4px 12px;
@@ -376,10 +353,7 @@
     cursor: pointer;
     transition: background .15s, border-color .15s;
   }
-  .copy-btn:hover{
-    background: var(--bg-hover);
-    border-color: var(--text-muted);
-  }
+  .copy-btn:hover{ background: var(--bg-hover); border-color: var(--text-muted); }
   .copy-btn:active{ background: var(--line-light); }
   .copy-btn.is-copied{
     color: var(--copied-color);
@@ -419,7 +393,7 @@
     filter: var(--arg-active-filter);
   }
 
-  /* 参数着色：按语义分类（走 CSS 变量，随主题切换） */
+  /* 参数着色 */
   .arg--enable  { color: var(--arg-enable-color);  background: var(--arg-enable-bg)  }
   .arg--disable { color: var(--arg-disable-color); background: var(--arg-disable-bg) }
   .arg--value   { color: var(--arg-value-color);   background: var(--arg-value-bg)   }
@@ -428,7 +402,7 @@
   .arg--plain   { color: var(--arg-plain-color);   background: var(--arg-plain-bg)   }
 
   /* ============================================================
-     8. 参数描述面板（点击参数后显示）
+     8. 参数描述面板
      ============================================================ */
   .arg-desc{
     display: flex;
@@ -458,21 +432,11 @@
     to  { opacity: 1;  transform: none; }
   }
 
-  /* 细滚动条样式（WebKit 内核） */
   .arg-desc::-webkit-scrollbar{ height: 6px; }
-  .arg-desc::-webkit-scrollbar-track{
-    background: var(--scrollbar-track);
-    border-radius: 3px;
-  }
-  .arg-desc::-webkit-scrollbar-thumb{
-    background: var(--scrollbar-thumb);
-    border-radius: 3px;
-  }
-  .arg-desc::-webkit-scrollbar-thumb:hover{
-    background: var(--scrollbar-thumb-hover);
-  }
+  .arg-desc::-webkit-scrollbar-track{ background: var(--scrollbar-track); border-radius: 3px; }
+  .arg-desc::-webkit-scrollbar-thumb{ background: var(--scrollbar-thumb); border-radius: 3px; }
+  .arg-desc::-webkit-scrollbar-thumb:hover{ background: var(--scrollbar-thumb-hover); }
 
-  /* 描述面板左侧的参数名：默认中性色，激活时由 JS 同步为参数配色 */
   .arg-desc__name{
     flex: 0 0 auto;
     padding: 1px 6px;
@@ -484,7 +448,6 @@
     white-space: nowrap;
     transition: background-color .15s, color .15s;
   }
-  /* 描述文字：另起一行 */
   .arg-desc__text{
     flex: 0 0 auto;
     white-space: nowrap;
@@ -616,16 +579,18 @@
      ============================================================ -->
 <nav>
   <div class="nav-inner">
-    <a href="#cms">CMS GC + ParNew GC（Java 7）</a>
-    <a href="#g1-fixed">G1GC 固定 IHOP（Java 8）</a>
-    <a href="#g1-adaptive">G1GC 动态 IHOP（Java 9+）</a>
-    <a href="#g1-uncommit">G1GC 内存归还（Java 12+）</a>
-    <a href="#shenandoah">ShenandoahGC（Java 25+）</a>
-    <a href="#shenandoah-uncommit">ShenandoahGC 归还（Java 25+）</a>
+    <a href="#cms">CMS（Java 7）</a>
+    <a href="#g1-fixed">G1 固定 IHOP（Java 8）</a>
+    <a href="#g1-adaptive">G1 动态 IHOP（Java 9+）</a>
+    <a href="#g1-uncommit">G1 内存归还（Java 12+）</a>
+    <a href="#zgc21-off">ZGC 关闭归还（Java 21+）</a>
+    <a href="#zgc21-on">ZGC 启用归还（Java 21+）</a>
+    <a href="#zgc25-off">ZGC 关闭归还（Java 25+）</a>
+    <a href="#zgc25-on">ZGC 启用归还（Java 25+）</a>
     <a href="#mobile8">手机版（Java 8）</a>
     <a href="#mobile9">手机版（Java 9+）</a>
-    <a href="#gc-threads">Java 7 GC 线程数参考表格</a>
-    <a href="#young-gen">Java 7 年轻代大小 (-Xmn) 参考表格</a>
+    <a href="#gc-threads">GC 线程数参考表格</a>
+    <a href="#young-gen">年轻代大小参考表格</a>
   </div>
 </nav>
 
@@ -647,7 +612,7 @@
         <button class="copy-btn" type="button">复制参数</button>
       </div>
       <div class="code-wrap">
-        <code class="args">-Xmx4096M -Xms4096M -Xmn1024M -XX:PermSize=256M -XX:MaxPermSize=512M -XX:+ResizeTLAB -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:+CMSClassUnloadingEnabled -XX:+ExplicitGCInvokesConcurrent -XX:+AlwaysPreTouch -XX:SurvivorRatio=25 -XX:MaxTenuringThreshold=1 -XX:TargetSurvivorRatio=90 -XX:CMSInitiatingOccupancyFraction=60 -XX:+UseCMSInitiatingOccupancyOnly -XX:+CMSScavengeBeforeRemark -XX:+CMSParallelRemarkEnabled -XX:+CMSConcurrentMTEnabled -XX:+UseCMSCompactAtFullCollection -XX:CMSFullGCsBeforeCompaction=1 -XX:ParallelGCThreads=12 -XX:ConcGCThreads=4 -XX:ReservedCodeCacheSize=384M -XX:+UseCodeCacheFlushing</code>
+        <code class="args">-Xmx4096M -Xms4096M -Xmn1024M -XX:PermSize=256M -XX:MaxPermSize=512M -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:+CMSClassUnloadingEnabled -XX:+ExplicitGCInvokesConcurrent -XX:+AlwaysPreTouch -XX:CMSInitiatingOccupancyFraction=60 -XX:+CMSScavengeBeforeRemark -XX:+CMSParallelRemarkEnabled -XX:+UseCMSCompactAtFullCollection -XX:CMSFullGCsBeforeCompaction=5 -XX:ParallelGCThreads=12 -XX:ConcGCThreads=4 -XX:ReservedCodeCacheSize=384M</code>
       </div>
     </div>
   </section>
@@ -663,7 +628,7 @@
         <button class="copy-btn" type="button">复制参数</button>
       </div>
       <div class="code-wrap">
-        <code class="args">-XX:+ResizeTLAB -XX:+ExplicitGCInvokesConcurrent -XX:ReservedCodeCacheSize=384M -XX:+UseCodeCacheFlushing -XX:+AlwaysPreTouch -XX:+UseG1GC -XX:MaxGCPauseMillis=25 -XX:GCPauseIntervalMillis=50 -XX:InitiatingHeapOccupancyPercent=45 -XX:+UseAdaptiveSizePolicy -XX:+UseDynamicNumberOfGCThreads</code>
+        <code class="args">-XX:+ExplicitGCInvokesConcurrent -XX:ReservedCodeCacheSize=384M -XX:+AlwaysPreTouch -XX:+UseG1GC -XX:MaxGCPauseMillis=50 -XX:InitiatingHeapOccupancyPercent=45</code>
       </div>
     </div>
   </section>
@@ -679,7 +644,7 @@
         <button class="copy-btn" type="button">复制参数</button>
       </div>
       <div class="code-wrap">
-        <code class="args">-XX:+ResizeTLAB -XX:+ExplicitGCInvokesConcurrent -XX:ReservedCodeCacheSize=384M -XX:+SegmentedCodeCache -XX:+UseCodeCacheFlushing -XX:+AlwaysPreTouch -XX:+UseG1GC -XX:MaxGCPauseMillis=25 -XX:GCPauseIntervalMillis=50 -XX:+G1UseAdaptiveIHOP -XX:+UseAdaptiveSizePolicy -XX:+UseDynamicNumberOfGCThreads</code>
+        <code class="args">-XX:+ExplicitGCInvokesConcurrent -XX:ReservedCodeCacheSize=384M -XX:+AlwaysPreTouch -XX:+UseG1GC -XX:MaxGCPauseMillis=50</code>
       </div>
     </div>
   </section>
@@ -695,39 +660,71 @@
         <button class="copy-btn" type="button">复制参数</button>
       </div>
       <div class="code-wrap">
-        <code class="args">-XX:+ResizeTLAB -XX:+ExplicitGCInvokesConcurrent -XX:ReservedCodeCacheSize=384M -XX:+SegmentedCodeCache -XX:+UseCodeCacheFlushing -XX:+UseG1GC -XX:MaxGCPauseMillis=50 -XX:+G1UseAdaptiveIHOP -XX:+UseAdaptiveSizePolicy -XX:+UseDynamicNumberOfGCThreads -XX:G1PeriodicGCInterval=30000 -XX:+G1PeriodicGCInvokesConcurrent</code>
+        <code class="args">-XX:+ExplicitGCInvokesConcurrent -XX:ReservedCodeCacheSize=384M -XX:+UseG1GC -XX:MaxGCPauseMillis=50 -XX:G1PeriodicGCInterval=30000</code>
       </div>
     </div>
   </section>
 
-  <!-- ShenandoahGC 分代模式（Java 25+） -->
-  <section id="shenandoah">
+  <!-- ZGC 分代模式 关闭内存归还（Java 21+） -->
+  <section id="zgc21-off">
     <div class="card">
       <div class="card-head">
         <div class="title-group">
-          <span class="badge badge--java25">Java 25+</span>
-          <h3>ShenandoahGC 分代模式 动态触发时机</h3>
+          <span class="badge badge--java21">Java 21+</span>
+          <h3>ZGC 分代模式 关闭内存归还</h3>
         </div>
         <button class="copy-btn" type="button">复制参数</button>
       </div>
       <div class="code-wrap">
-        <code class="args">-XX:+ResizeTLAB -XX:+ExplicitGCInvokesConcurrent -XX:ReservedCodeCacheSize=384M -XX:+SegmentedCodeCache -XX:+UseCodeCacheFlushing -XX:+AlwaysPreTouch -XX:+UseCompactObjectHeaders -XX:+UseShenandoahGC -XX:ShenandoahGCMode=generational -XX:ShenandoahGCHeuristics=adaptive</code>
+        <code class="args">-XX:+ExplicitGCInvokesConcurrent -XX:ReservedCodeCacheSize=384M -XX:+AlwaysPreTouch -XX:+UseZGC -XX:+ZGenerational -XX:-ZUncommit</code>
       </div>
     </div>
   </section>
 
-  <!-- ShenandoahGC 分代模式 启用内存归还（Java 25+） -->
-  <section id="shenandoah-uncommit">
+  <!-- ZGC 分代模式 启用内存归还（Java 21+） -->
+  <section id="zgc21-on">
     <div class="card">
       <div class="card-head">
         <div class="title-group">
-          <span class="badge badge--java25">Java 25+</span>
-          <h3>ShenandoahGC 分代模式 动态触发时机 启用内存归还</h3>
+          <span class="badge badge--java21">Java 21+</span>
+          <h3>ZGC 分代模式 启用内存归还</h3>
         </div>
         <button class="copy-btn" type="button">复制参数</button>
       </div>
       <div class="code-wrap">
-        <code class="args">-XX:+UnlockExperimentalVMOptions -XX:+ResizeTLAB -XX:+ExplicitGCInvokesConcurrent -XX:ReservedCodeCacheSize=384M -XX:+SegmentedCodeCache -XX:+UseCodeCacheFlushing -XX:+UseCompactObjectHeaders -XX:+UseShenandoahGC -XX:ShenandoahGCMode=generational -XX:ShenandoahGCHeuristics=adaptive -XX:+ShenandoahUncommit -XX:ShenandoahUncommitDelay=30000</code>
+        <code class="args">-XX:+ExplicitGCInvokesConcurrent -XX:ReservedCodeCacheSize=384M -XX:+UseZGC -XX:+ZGenerational -XX:ZUncommitDelay=30</code>
+      </div>
+    </div>
+  </section>
+
+  <!-- ZGC 分代模式 关闭内存归还（Java 25+） -->
+  <section id="zgc25-off">
+    <div class="card">
+      <div class="card-head">
+        <div class="title-group">
+          <span class="badge badge--java25">Java 25+</span>
+          <h3>ZGC 分代模式 关闭内存归还</h3>
+        </div>
+        <button class="copy-btn" type="button">复制参数</button>
+      </div>
+      <div class="code-wrap">
+        <code class="args">-XX:+ExplicitGCInvokesConcurrent -XX:ReservedCodeCacheSize=384M -XX:+AlwaysPreTouch -XX:+UseCompactObjectHeaders -XX:+UseZGC -XX:-ZUncommit</code>
+      </div>
+    </div>
+  </section>
+
+  <!-- ZGC 分代模式 启用内存归还（Java 25+） -->
+  <section id="zgc25-on">
+    <div class="card">
+      <div class="card-head">
+        <div class="title-group">
+          <span class="badge badge--java25">Java 25+</span>
+          <h3>ZGC 分代模式 启用内存归还</h3>
+        </div>
+        <button class="copy-btn" type="button">复制参数</button>
+      </div>
+      <div class="code-wrap">
+        <code class="args">-XX:+ExplicitGCInvokesConcurrent -XX:ReservedCodeCacheSize=384M -XX:+UseCompactObjectHeaders -XX:+UseZGC -XX:ZUncommitDelay=30</code>
       </div>
     </div>
   </section>
@@ -748,7 +745,7 @@
         <button class="copy-btn" type="button">复制参数</button>
       </div>
       <div class="code-wrap">
-        <code class="args">-XX:+ResizeTLAB -XX:+ExplicitGCInvokesConcurrent -XX:ReservedCodeCacheSize=384M -XX:+UseCodeCacheFlushing -XX:+AlwaysPreTouch -XX:+UseG1GC -XX:MaxGCPauseMillis=50 -XX:InitiatingHeapOccupancyPercent=45 -XX:+UseAdaptiveSizePolicy -XX:+UseDynamicNumberOfGCThreads -XX:-UseNUMA -XX:ActiveProcessorCount=8 -Djdk.lang.Process.launchMechanism=FORK</code>
+        <code class="args">-XX:+ExplicitGCInvokesConcurrent -XX:ReservedCodeCacheSize=384M -XX:+AlwaysPreTouch -XX:+UseG1GC -XX:MaxGCPauseMillis=80 -XX:InitiatingHeapOccupancyPercent=45 -XX:-UseNUMA -XX:ActiveProcessorCount=8 -Djdk.lang.Process.launchMechanism=FORK</code>
       </div>
     </div>
   </section>
@@ -764,7 +761,7 @@
         <button class="copy-btn" type="button">复制参数</button>
       </div>
       <div class="code-wrap">
-        <code class="args">-XX:+ResizeTLAB -XX:+ExplicitGCInvokesConcurrent -XX:ReservedCodeCacheSize=384M -XX:+SegmentedCodeCache -XX:+UseCodeCacheFlushing -XX:+AlwaysPreTouch -XX:+UseG1GC -XX:MaxGCPauseMillis=50 -XX:+G1UseAdaptiveIHOP -XX:+UseAdaptiveSizePolicy -XX:+UseDynamicNumberOfGCThreads -XX:-UseNUMA -XX:ActiveProcessorCount=8 -Djdk.lang.Process.launchMechanism=FORK</code>
+        <code class="args">-XX:+ExplicitGCInvokesConcurrent -XX:ReservedCodeCacheSize=384M -XX:+AlwaysPreTouch -XX:+UseG1GC -XX:MaxGCPauseMillis=80 -XX:-UseNUMA -XX:ActiveProcessorCount=8 -Djdk.lang.Process.launchMechanism=FORK</code>
       </div>
     </div>
   </section>
@@ -848,30 +845,15 @@
 <script>
 /* ============================================================
    页面交互脚本
-
-   架构说明：
-   1) 初始化阶段为每个 code.args 生成高亮 span，并在其后插入描述面板
-   2) 使用事件委托统一处理参数点击，避免为每个 span 单独绑定
-   3) 复制按钮读取卡片内缓存的原始参数文本，写入剪贴板
-   4) 描述面板左侧参数名的配色通过 CSS 变量注入，
-      主题切换时浏览器会自动重新计算，无需 JS 监听
    ============================================================ */
 (function () {
   'use strict';
 
-  /* ==========================================================
-     1. 常量与配置
-     ========================================================== */
-
   /**
    * 参数用途说明字典。
-   * 键为参数的完整文本（含具体数值），值为简短的用途描述。
-   * 新增参数时在此补充，页面会自动展示对应描述。
+   * 键为参数的完整文本，值为简短的用途描述。
    */
   const ARG_DESCRIPTIONS = {
-    /* ---------- TLAB ---------- */
-    '-XX:+ResizeTLAB': '启用 TLAB 大小自适应调整，减少线程间内存分配竞争。',
-
     /* ---------- 堆与内存 ---------- */
     '-Xmx4096M': '堆内存最大值，限制 JVM 可用堆的上限。',
     '-Xms4096M': '堆内存初始值，与最大值相同可避免运行期扩容。',
@@ -885,52 +867,40 @@
     '-XX:+UseConcMarkSweepGC': '启用 CMS 回收器，以低停顿为目标回收老年代。',
     '-XX:+UseParNewGC': '年轻代使用 ParNew 并行回收器，配合 CMS 使用。',
     '-XX:+UseG1GC': '启用 G1 回收器，按 Region 管理堆并预测停顿。',
-    '-XX:+UseShenandoahGC': '启用 Shenandoah 回收器，停顿与堆大小无关。',
-    '-XX:ShenandoahGCMode=generational': 'Shenandoah 分代模式，区分年轻代与老年代。',
-    '-XX:ShenandoahGCHeuristics=adaptive': 'Shenandoah 自适应启发式，动态调整回收时机。',
+    '-XX:+UseZGC': '启用 ZGC 回收器，目标是将停顿时间控制在 1ms 以内。',
+    '-XX:+ZGenerational': '启用 ZGC 分代模式，区分年轻代与老年代，提升吞吐量。',
 
     /* ---------- CMS 相关 ---------- */
     '-XX:+CMSClassUnloadingEnabled': '允许 CMS 并发卸载不再使用的类。',
     '-XX:+ExplicitGCInvokesConcurrent': 'System.gc() 触发并发 GC，避免长时间停顿。',
     '-XX:+CMSScavengeBeforeRemark': 'CMS 重新标记前先做一次 Young GC，缩短停顿。',
     '-XX:+CMSParallelRemarkEnabled': 'CMS 重新标记阶段并行执行，降低停顿时间。',
-    '-XX:+CMSConcurrentMTEnabled': 'CMS 并发阶段使用多线程，加快回收速度。',
     '-XX:+UseCMSCompactAtFullCollection': 'Full GC 时压缩老年代，减少内存碎片。',
-    '-XX:CMSFullGCsBeforeCompaction=1': '每 N 次 Full GC 后执行一次老年代压缩。',
+    '-XX:CMSFullGCsBeforeCompaction=5': '每 N 次 Full GC 后执行一次老年代压缩。',
     '-XX:CMSInitiatingOccupancyFraction=60': '老年代占用达 60% 时触发 CMS 回收。',
-    '-XX:+UseCMSInitiatingOccupancyOnly': '只按固定阈值触发 CMS，禁用运行时动态调整。',
 
     /* ---------- G1 相关 ---------- */
-    '-XX:MaxGCPauseMillis=25': '期望的最大 GC 停顿时间（毫秒），G1 据此调整回收策略。',
-    '-XX:MaxGCPauseMillis=50': '期望的最大 GC 停顿时间（毫秒），值越大吞吐越高。',
-    '-XX:GCPauseIntervalMillis=50': '两次 GC 之间的最小间隔目标（毫秒）。',
+    '-XX:MaxGCPauseMillis=50': '期望的最大 GC 停顿时间（毫秒），G1 据此调整回收策略。',
+    '-XX:MaxGCPauseMillis=80': '移动端放宽停顿目标，优先保证吞吐。',
     '-XX:InitiatingHeapOccupancyPercent=45': '堆占用达 45% 时启动并发标记周期。',
-    '-XX:+G1UseAdaptiveIHOP': '自适应调整 IHOP 阈值，替代固定百分比。',
     '-XX:G1PeriodicGCInterval=30000': '每隔 30 秒检查是否可触发周期性 GC。',
-    '-XX:+G1PeriodicGCInvokesConcurrent': '周期性 GC 采用并发方式，减少停顿。',
+
+    /* ---------- ZGC 相关 ---------- */
+    '-XX:-ZUncommit': '禁用 ZGC 内存归还，保持堆内存占用稳定。',
+    '-XX:ZUncommitDelay=30': 'ZGC 在空闲 30 秒后将内存归还操作系统。',
 
     /* ---------- 停顿与线程 ---------- */
     '-XX:ParallelGCThreads=12': '并行 GC 线程数，影响 Young / Full GC 的并行度。',
     '-XX:ConcGCThreads=4': '并发 GC 线程数，用于 CMS 并发阶段。',
-    '-XX:+UseDynamicNumberOfGCThreads': '根据负载动态调整 GC 线程数。',
-    '-XX:+UseAdaptiveSizePolicy': '自适应调整各代大小与对象晋升阈值。',
 
-    /* ---------- 内存预触碰与晋升 ---------- */
+    /* ---------- 内存预触碰 ---------- */
     '-XX:+AlwaysPreTouch': '启动时预触碰全部堆内存，避免运行期缺页停顿。',
-    '-XX:SurvivorRatio=25': 'Eden 与单个 Survivor 区的比例。',
-    '-XX:MaxTenuringThreshold=1': '对象晋升老年代所需的最小 GC 次数。',
-    '-XX:TargetSurvivorRatio=90': 'Survivor 区目标使用率，影响对象晋升时机。',
 
     /* ---------- 代码缓存 ---------- */
     '-XX:ReservedCodeCacheSize=384M': 'JIT 编译代码缓存的最大容量。',
-    '-XX:+UseCodeCacheFlushing': '代码缓存将满时刷新，避免停止编译。',
-    '-XX:+SegmentedCodeCache': '将代码缓存分段管理，提升访问效率。',
 
     /* ---------- Java 25+ 其他 ---------- */
     '-XX:+UseCompactObjectHeaders': '使用紧凑对象头，减少对象内存占用。',
-    '-XX:+UnlockExperimentalVMOptions': '解锁实验性 JVM 选项，使用新特性所需。',
-    '-XX:+ShenandoahUncommit': '允许 Shenandoah 将空闲内存归还操作系统。',
-    '-XX:ShenandoahUncommitDelay=30000': '空闲 30 秒后开始归还内存给系统。',
 
     /* ---------- 移动端 ---------- */
     '-XX:-UseNUMA': '禁用 NUMA 感知，适合移动端单一内存节点。',
@@ -940,9 +910,6 @@
 
   /**
    * 参数类别名列表。
-   * 类别到配色不再由 JS 硬编码，而是通过 CSS 变量（--arg-*-color / --arg-*-bg）
-   * 在样式表中定义；JS 只在描述面板上注入 var(--...) 引用，
-   * 主题切换时浏览器自动重新计算，无需监听变化。
    */
   const ARG_CLASSES = [
     'arg--enable',
@@ -957,17 +924,11 @@
   const DEFAULT_NAME = '—';
   const DEFAULT_TEXT = '点击上方任意参数查看用途说明';
 
-  /** 当参数不在字典中时的兜底描述。 */
+  /** 兜底描述。 */
   const FALLBACK_DESC = '暂无说明。';
 
-  /* ==========================================================
-     2. 工具函数
-     ========================================================== */
-
   /**
-   * 转义 HTML 特殊字符，避免内容被解析为标签或破坏属性值。
-   * @param {*} value - 待转义的值（自动转为字符串）
-   * @returns {string}  转义后的安全字符串
+   * 转义 HTML 特殊字符。
    */
   function escapeHtml(value) {
     return String(value).replace(/[&<>"]/g, function (ch) {
@@ -977,25 +938,18 @@
 
   /**
    * 根据参数前缀判断其语义类别。
-   * 判断顺序很重要：更具体的前缀必须放在更宽泛的前缀之前，
-   * 例如 -XX:+Flag 必须优先于 -XX: 判断。
-   * @param {string} arg - 单个 JVM 参数
-   * @returns {string}    对应的 CSS 类别名
    */
   function classifyArg(arg) {
-    if (/^-XX:\+/.test(arg)) return 'arg--enable';   // -XX:+Flag
-    if (/^-XX:-/.test(arg))  return 'arg--disable';  // -XX:-Flag
-    if (/^-XX:/.test(arg))   return 'arg--value';    // -XX:Key=Value
-    if (/^-D/.test(arg))     return 'arg--system';   // -D 系统属性
-    if (/^-X/.test(arg))     return 'arg--memory';   // -Xmx / -Xms / -Xmn
-    return 'arg--plain';                             // 其他（兜底）
+    if (/^-XX:\+/.test(arg)) return 'arg--enable';
+    if (/^-XX:-/.test(arg))  return 'arg--disable';
+    if (/^-XX:/.test(arg))   return 'arg--value';
+    if (/^-D/.test(arg))     return 'arg--system';
+    if (/^-X/.test(arg))     return 'arg--memory';
+    return 'arg--plain';
   }
 
   /**
    * 查找 span 元素所属的参数类别。
-   * span 上可能同时挂有 is-active 等状态类，因此显式遍历已知类别。
-   * @param {HTMLElement} span
-   * @returns {string}    类别名
    */
   function findArgClass(span) {
     for (let i = 0; i < ARG_CLASSES.length; i++) {
@@ -1006,9 +960,6 @@
 
   /**
    * 将描述面板左侧参数名的配色同步为被点击参数的配色。
-   * 注入的是 CSS 变量引用而非固定色值，主题切换时自动跟随。
-   * @param {HTMLElement} nameEl - 描述面板左侧的参数名元素
-   * @param {HTMLElement|null} span - 被点击的参数 span；传 null 表示恢复默认
    */
   function syncNameStyle(nameEl, span) {
     if (!span) {
@@ -1021,14 +972,8 @@
     nameEl.style.backgroundColor = 'var(--' + prefix + '-bg)';
   }
 
-  /* ==========================================================
-     3. 初始化：语法高亮 + 注入描述面板
-     ========================================================== */
-
   /**
    * 生成单个参数 span 的 HTML 字符串。
-   * @param {string} arg - 参数文本
-   * @returns {string}    含 data-arg / data-desc 的 span HTML
    */
   function renderArgSpan(arg) {
     const cls  = classifyArg(arg);
@@ -1040,35 +985,29 @@
          + '</span>';
   }
 
-  /** 构建描述面板的初始 HTML 内容。 */
+  /**
+   * 构建描述面板的初始 HTML 内容。
+   */
   function buildPanelHtml() {
     return '<code class="arg-desc__name">' + escapeHtml(DEFAULT_NAME) + '</code>'
          + '<span class="arg-desc__text">' + escapeHtml(DEFAULT_TEXT) + '</span>';
   }
 
   /**
-   * 对页面中所有 code.args 执行初始渲染：
-   * 1. 归一化原始文本并缓存到 data-raw（供复制使用）
-   * 2. 按空格拆分并逐项着色
-   * 3. 在代码块后插入描述面板
-   *
-   * 该函数具备幂等性：重复调用时会先移除旧的描述面板。
+   * 对页面中所有 code.args 执行初始渲染。
    */
   function initArgBlocks() {
-    // 幂等保护：移除已存在的描述面板，避免重复初始化
+    // 移除已存在的描述面板，避免重复初始化
     document.querySelectorAll('.arg-desc').forEach(function (el) {
       el.parentNode.removeChild(el);
     });
 
     document.querySelectorAll('code.args').forEach(function (el) {
-      // 归一化空白，缓存原始文本供复制使用
       const raw = el.textContent.trim().replace(/\s+/g, ' ');
       el.dataset.raw = raw;
 
-      // 按空格拆分并逐项着色
       el.innerHTML = raw.split(' ').map(renderArgSpan).join('');
 
-      // 在代码块之后插入描述面板
       const panel = document.createElement('div');
       panel.className = 'arg-desc';
       panel.innerHTML = buildPanelHtml();
@@ -1076,13 +1015,8 @@
     });
   }
 
-  /* ==========================================================
-     4. 交互：点击参数显示描述
-     ========================================================== */
-
   /**
-   * 将描述面板恢复到默认（未选中）状态。
-   * @param {HTMLElement} panel - 描述面板元素
+   * 将描述面板恢复到默认状态。
    */
   function resetPanel(panel) {
     const nameEl = panel.querySelector('.arg-desc__name');
@@ -1095,10 +1029,7 @@
   }
 
   /**
-   * 处理单个参数点击：
-   * - 若当前参数已处于选中态，则取消选中并恢复默认面板
-   * - 否则清除同代码块内其他参数的选中态，激活当前参数
-   * @param {HTMLElement} span - 被点击的参数 span
+   * 处理单个参数点击。
    */
   function handleArgClick(span) {
     const code = span.closest('code.args');
@@ -1107,19 +1038,16 @@
     const panel = code.nextElementSibling;
     if (!panel || !panel.classList.contains('arg-desc')) return;
 
-    // 再次点击同一参数 → 取消选中
     if (span.classList.contains('is-active')) {
       span.classList.remove('is-active');
       resetPanel(panel);
       return;
     }
 
-    // 清除同代码块内其他参数的选中状态
     code.querySelectorAll('span.is-active').forEach(function (s) {
       s.classList.remove('is-active');
     });
 
-    // 激活当前参数并更新描述面板
     span.classList.add('is-active');
 
     const nameEl = panel.querySelector('.arg-desc__name');
@@ -1129,27 +1057,18 @@
     syncNameStyle(nameEl, span);
 
     panel.classList.add('is-active');
-    panel.scrollLeft = 0;  // 切换参数时回到最左端
+    panel.scrollLeft = 0;
   }
 
-  // 使用事件委托统一处理所有参数点击
+  // 事件委托
   document.addEventListener('click', function (e) {
-    // 防御性检查：e.target 可能不是 Element（如文本节点）
     if (!(e.target instanceof Element)) return;
-
     const span = e.target.closest('.args span');
     if (span) handleArgClick(span);
   });
 
-  /* ==========================================================
-     5. 复制按钮
-     ========================================================== */
-
   /**
-   * Clipboard API 不可用时的降级复制方案。
-   * 通过临时 textarea + document.execCommand('copy') 实现。
-   * @param {string} text - 待复制的文本
-   * @param {Function} onSuccess - 复制成功后的回调
+   * Clipboard API 降级方案。
    */
   function copyViaFallback(text, onSuccess) {
     const ta = document.createElement('textarea');
@@ -1161,14 +1080,13 @@
       document.execCommand('copy');
       onSuccess();
     } catch (err) {
-      /* 静默忽略复制失败，避免打断用户操作 */
+      /* 忽略 */
     }
     document.body.removeChild(ta);
   }
 
   /**
-   * 在按钮上显示复制成功的视觉反馈。
-   * @param {HTMLElement} btn - 复制按钮
+   * 复制成功视觉反馈。
    */
   function flashCopied(btn) {
     btn.textContent = '已复制';
@@ -1180,14 +1098,12 @@
   }
 
   /**
-   * 处理单个复制按钮点击：收集当前卡片内全部参数文本，写入剪贴板。
-   * @param {HTMLElement} btn - 复制按钮
+   * 处理复制按钮点击。
    */
   function handleCopyClick(btn) {
     const card = btn.closest('.card');
     if (!card) return;
 
-    // 收集当前卡片内的全部参数，按行拼接
     const text = Array.prototype.map
       .call(card.querySelectorAll('code.args'), function (c) {
         return c.dataset.raw || '';
@@ -1207,9 +1123,7 @@
     btn.addEventListener('click', function () { handleCopyClick(btn); });
   });
 
-  /* ==========================================================
-     6. 启动
-     ========================================================== */
+  // 启动初始化
   initArgBlocks();
 
 })();
